@@ -1,2 +1,5 @@
+from mesa.space import Grid
+
+
 def create_world():
-    #TODO Returns a grid fo 25 by 25
+    return Grid(25, 25, False)
