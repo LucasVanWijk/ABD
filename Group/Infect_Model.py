@@ -1,5 +1,5 @@
 from mesa import Model
-from mesa.time import SimultaneousActivation
+from parallel import SimultaneousActivation
 from mesa.space import MultiGrid
 from Infect_Agents import Infect_Agent, Work, Recreation
 from mesa.datacollection import DataCollector
@@ -26,6 +26,7 @@ def build_work_recreation(model, start_h, start_w, size, type_build):
 class BaseModel(Model):
     """A model with some number of agents."""
     def __init__(self, healthy_N, sick_N, width, height, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
+        self.parallel_amount = 16
         self.healthy_agents = healthy_N
         self.sick_agent = sick_N
         self.min_per_step = min_per_step
