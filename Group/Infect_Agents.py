@@ -1,5 +1,4 @@
 from mesa import Agent
-import datetime
 class Infect_Agent(Agent):
     """ An agent with fixed initial wealth."""
     def __init__(self, unique_id, model,infected=False):
@@ -23,8 +22,7 @@ class Infect_Agent(Agent):
                     agent.infected = True
 
     def step(self):
-        time = self.model.ini_date + datetime.timedelta(minutes= self.model.min_per_step * self.model.schedule.steps)
-        self.move(time)
+        self.move(self.model.date)
         if self.infected:
             self.infect_other()
 

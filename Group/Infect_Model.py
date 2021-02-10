@@ -18,6 +18,7 @@ class Base_Model(Model):
         self.grid = MultiGrid(width, height, True)
         self.schedule = SimultaneousActivation(self)
         self.running = True
+        self.date = ini_date
         
         # infected agent
         for i in range(self.sick_agent):
@@ -42,5 +43,6 @@ class Base_Model(Model):
             
     def step(self):
         #time = self.ini_date + datetime.timedelta(minutes= self.min_per_step * self.schedule.time)
+        self.date = self.ini_date + datetime.timedelta(minutes= self.min_per_step * self.schedule.steps)
         self.datacollector.collect(self)
         self.schedule.step()
