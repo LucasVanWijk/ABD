@@ -1,7 +1,7 @@
 from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import ChartModule
-from Infect_Agents import Infect_Agent
+from Infect_Agents import Infect_Agent, Work, Recreation
 from Infect_Model import BaseModel
 
 def agent_portrayal(agent):
@@ -9,12 +9,18 @@ def agent_portrayal(agent):
                  "Filled": "true",
                  "r": 0.5}
 
-    if agent.infected:
+    if isinstance(agent, Infect_Agent) and agent.infected:
         portrayal["Color"] = "red"
-        portrayal["Layer"] = 0
-    else:
+        portrayal["Layer"] = 1
+    elif isinstance(agent, Infect_Agent) and not agent.infected:
         portrayal["Color"] = "green"
         portrayal["Layer"] = 1
+    elif isinstance(agent, Work):
+        portrayal["Color"] = "purple"
+        portrayal["Layer"] = 0
+    elif isinstance(agent, Recreation):
+        portrayal["Color"] = "orange"
+        portrayal["Layer"] = 0
         
     return portrayal
 
