@@ -37,8 +37,8 @@ class Infect_Agent(Agent):
         for cell in surround:
             cellmates = self.model.grid.get_cell_list_contents([cell])
             if len(cellmates) > 0:
-                if isinstance(agent, Infect_Agent):
-                    for agent in cellmates:
+                for agent in cellmates:
+                    if isinstance(agent, Infect_Agent):
                         agent.infected = True
 
     def step(self):
