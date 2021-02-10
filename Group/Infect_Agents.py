@@ -1,6 +1,6 @@
 from mesa import Agent
 from Find_Closest_Cell import find
-from pathfinding import  pathfinding
+from pathfinding import  get_positions
 
 class Infect_Agent(Agent):
     """ An agent with fixed initial wealth."""
@@ -21,14 +21,14 @@ class Infect_Agent(Agent):
 
         if 8 == time.hour:
             self.closest_work = find(self.model.work, self.pos)
-            self.move_que = pathfinding(self.pos, self.closest_work)
+            self.move_que = get_positions(self.pos, self.closest_work)
         
         elif 17 == time.hour:
             self.closest_rec = find(self.model.recreation, self.pos)
-            self.move_que = pathfinding(self.pos, self.closest_rec)
+            self.move_que = get_positions(self.pos, self.closest_rec)
 
         elif 19 == time.hour:
-            self.move_que = pathfinding(self.pos, self.model.grid.find_empty())
+            self.move_que = get_positions(self.pos, self.model.grid.find_empty())
         
         if len(self.move_que) > 0:
             self.model.grid.move_agent(self, self.move_que[0])
