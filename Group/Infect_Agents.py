@@ -24,11 +24,12 @@ class Infect_Agent(Agent):
             self.move_que = pathfinding(self.pos, self.closest_work)
 
         elif 19 == time.hour:
-            self.move_que = pathfinding(self.pos, self.model.grid.find_empty())
+            new_position = self.random.choice(possible_steps)
+            self.model.grid.move_agent(self, new_position)
+            self.move_que = pathfinding(self.pos, new_position)
         
-        
+        self.model.grid.move_agent(self, self.move_que[0])
         if len(self.move_que) > 0:
-            self.model.grid.move_agent(self, self.move_que[0])
             self.move_que = self.move_que[1:]
 
 
@@ -37,9 +38,9 @@ class Infect_Agent(Agent):
         for cell in surround:
             cellmates = self.model.grid.get_cell_list_contents([cell])
             if len(cellmates) > 0:
+                if isinstance(agent, Infect_Agent)
                 for agent in cellmates:
-                    if isinstance(agent, Infect_Agent):
-                        agent.infected = True
+                    agent.infected = True
 
     def step(self):
         self.move(self.model.date)
