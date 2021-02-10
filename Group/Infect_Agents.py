@@ -1,4 +1,6 @@
 from mesa import Agent
+
+
 class Infect_Agent(Agent):
     """ An agent with fixed initial wealth."""
     def __init__(self, unique_id, model,infected=False):
@@ -25,5 +27,21 @@ class Infect_Agent(Agent):
         self.move(self.model.date)
         if self.infected:
             self.infect_other()
+
+
+class City(Agent):
+    def __init__(self, unique_id, model):
+        super().__init__(unique_id, model)
+
+
+class Village(Agent):
+    def __init__(self, unique_id, model):
+        super().__init__(unique_id, model)
+
+
+class Recreation(Agent):
+    def __init__(self, unique_id, model):
+        super().__init__(unique_id, model)
+
 
 
