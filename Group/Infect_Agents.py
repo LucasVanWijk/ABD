@@ -4,6 +4,7 @@ class Infect_Agent(Agent):
     def __init__(self, unique_id, model,infected=False):
         super().__init__(unique_id, model)
         self.infected = infected
+        self.closest_rec = 
 
     def move(self, time):
         possible_steps = self.model.grid.get_neighborhood(
