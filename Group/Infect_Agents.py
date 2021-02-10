@@ -29,12 +29,7 @@ class Infect_Agent(Agent):
             self.infect_other()
 
 
-class City(Agent):
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
-
-
-class Village(Agent):
+class Work(Agent):
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
 
@@ -42,6 +37,7 @@ class Village(Agent):
 class Recreation(Agent):
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
+
 
 
 
