@@ -3,15 +3,18 @@ from mesa.time import SimultaneousActivation
 from mesa.space import MultiGrid
 from Infect_Agents import Infect_Agent
 from mesa.datacollection import DataCollector
+import datetime
 
 def compute_infected(model):
     return sum([1 if agent.infected else 0 for agent in model.schedule.agents ])
 
 class Base_Model(Model):
     """A model with some number of agents."""
-    def __init__(self, healthy_N, sick_N, width, height):
+    def __init__(self, healthy_N, sick_N, width, height, min_per_step=1,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
         self.healthy_agents = healthy_N
         self.sick_agent = sick_N
+        self.min_per_step = min_per_step
+        self.ini_date = ini_date
         self.grid = MultiGrid(width, height, True)
         self.schedule = SimultaneousActivation(self)
         self.running = True
@@ -38,5 +41,6 @@ class Base_Model(Model):
             model_reporters={"infected": compute_infected})
             
     def step(self):
+        #time = self.ini_date + datetime.timedelta(minutes= self.min_per_step * self.schedule.time)
         self.datacollector.collect(self)
         self.schedule.step()
