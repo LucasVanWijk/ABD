@@ -2,7 +2,7 @@ from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import ChartModule
 from Infect_Agents import Infect_Agent
-from Infect_Model import Base_Model
+from Infect_Model import BaseModel
 
 def agent_portrayal(agent):
     portrayal = {"Shape": "circle",
@@ -25,7 +25,7 @@ chart = ChartModule([{"Label": "infected",
                     data_collector_name='datacollector')
 
 
-server = ModularServer(Base_Model,
+server = ModularServer(BaseModel,
                        [grid,chart],
                        "Infected model",
                     #    {"N":250,"width":100, "height":100})
