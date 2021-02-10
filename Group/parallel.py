@@ -118,6 +118,7 @@ class SimultaneousActivation(BaseScheduler):
             
         p = Pool(batch_size)
         p.map(f,agent_batch_keys)
+        p.close()
 
         for agent_key in agent_keys:
             self._agents[agent_key].advance()

@@ -19,15 +19,15 @@ class Infect_Agent(Agent):
         # new_position = self.random.choice(possible_steps)
         # self.model.grid.move_agent(self, new_position)
 
-        if 8 == time.hour:
+        if 8 == time.hour and time.minute == 0:
             self.closest_work = find(self.model.work, self.pos)
             self.move_que = get_positions(self.pos, self.closest_work)
         
-        elif 17 == time.hour:
+        elif 17 == time.hour and time.minute == 0:
             self.closest_rec = find(self.model.recreation, self.pos)
             self.move_que = get_positions(self.pos, self.closest_rec)
 
-        elif 19 == time.hour:
+        elif 19 == time.hour and time.minute == 0:
             self.move_que = get_positions(self.pos, self.model.grid.find_empty())
         
         if len(self.move_que) > 0:
