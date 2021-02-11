@@ -68,7 +68,7 @@ class BaseModel(Model):
         for i in range(self.sick_agent,self.sick_agent+ self.healthy_agents):
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
-            a = Infect_Agent(i, self, (x,y), infected=True)
+            a = Infect_Agent(i, self, (x,y), infected=False)
             self.schedule.add(a)
             # Add the agent to a random grid cell
             self.grid.place_agent(a, (x, y))

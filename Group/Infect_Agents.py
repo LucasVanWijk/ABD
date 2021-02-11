@@ -1,6 +1,6 @@
 from mesa import Agent
 
-from pathfinding import  get_positions, find_closest_cell
+from Pathfinding import  get_positions, find_closest_cell
 import random
 
 class Infect_Agent(Agent):
@@ -8,8 +8,8 @@ class Infect_Agent(Agent):
     def __init__(self, unique_id, model, home, infected):
         super().__init__(unique_id, model)
         self.infected = infected
-        self.closest_rec = find_closest_cell(self.model.recreation, self.pos)
-        self.closest_work = find_closest_cell(self.model.work, self.pos)
+        self.closest_rec = None
+        self.closest_work = None
         self.home = home
         self.move_que = []
 
@@ -22,11 +22,11 @@ class Infect_Agent(Agent):
         # self.model.grid.move_agent(self, new_position)
 
         if 8 == time.hour and time.minute == 0:
-            self.closest_work = find(self.model.work, self.pos)
+            self.closest_work = find_closest_cell(self.model.work, self.pos)
             self.move_que = get_positions(self.pos, self.closest_work)
         
         elif 17 == time.hour and time.minute == 0:
-            self.closest_rec = find(self.model.recreation, self.pos)
+            self.closest_rec = find_closest_cell(self.model.recreation, self.pos)
             self.move_que = get_positions(self.pos, self.closest_rec)
 
         elif 19 == time.hour and time.minute == 0:
@@ -42,10 +42,10 @@ class Infect_Agent(Agent):
         for cell in surround:
             cellmates = self.model.grid.get_cell_list_contents([cell])
             if len(cellmates) > 0:
-                    for agent in cellmates:
-                        if isinstance(agent, Infect_Agent):
-                            if random.random()<self.model.infect_chanse:
-                                agent.infected = True
+                for agent in cellmates:
+                    if isinstance(agent, Infect_Agent):
+                        if random.random()<self.model.infect_chanse:
+                            agent.infected = True
 
     def step(self):
         self.move(self.model.date)
