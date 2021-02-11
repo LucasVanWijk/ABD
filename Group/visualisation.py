@@ -41,10 +41,10 @@ chart = ChartModule([{"Label": "infected",
                       "Color": "Green"}],
                     data_collector_name='datacollector')
 model_params = {
-    "width": 100,
-    "height": 100,
+    "width":  UserSettableParameter("slider", "width", 100, 1, 500),
+    "height":  UserSettableParameter("slider", "height", 100, 1, 500),
     "healthy_N": UserSettableParameter("slider", "amount healthy", 250, 1, 500),
-    "sick_N": UserSettableParameter("slider", "amount sick", 250, 1, 500),
+    "sick_N": UserSettableParameter("slider", "amount sick", 10, 1, 500),
     "work_n": UserSettableParameter("slider", "amount work locations", 20, 1, 50),
     "rec_n": UserSettableParameter("slider", "amount recreation locations", 20, 1, 50)
 }

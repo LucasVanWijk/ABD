@@ -2,6 +2,7 @@ from mesa import Model
 from parallel import SimultaneousActivation
 from mesa.space import MultiGrid
 from Infect_Agents import Infect_Agent, Work, Recreation
+from mesa.visualization.TextVisualization import TextData
 from mesa.datacollection import DataCollector
 import datetime
 import random
@@ -68,3 +69,4 @@ class BaseModel(Model):
         self.date = self.ini_date + datetime.timedelta(minutes= self.min_per_step * self.schedule.steps)
         self.datacollector.collect(self)
         self.schedule.step()
+        print(TextData(self, "date").render())
