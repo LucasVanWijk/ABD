@@ -4,6 +4,7 @@ from mesa.space import MultiGrid
 from Infect_Agents import Infect_Agent, Work, Recreation
 from mesa.datacollection import DataCollector
 import datetime
+import random
 
 
 def compute_infected(model):
@@ -25,7 +26,7 @@ def build_work_recreation(model, start_h, start_w, size, type_build):
 
 class BaseModel(Model):
     """A model with some number of agents."""
-    def __init__(self, healthy_N, sick_N, width, height, work_coords, rec_coords, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
+    def __init__(self, healthy_N, sick_N, width, height, work_n, rec_n, seed=41, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
         self.parallel_amount = 16
         self.healthy_agents = healthy_N
         self.sick_agent = sick_N
@@ -35,18 +36,23 @@ class BaseModel(Model):
         self.schedule = SimultaneousActivation(self)
         self.running = True
         self.date = ini_date
-        self.work = work_coords
-        self.recreation = rec_coords
+        self.work = []
+        self.recreation = []
+        random.seed(seed)
 
         # build work
-        for work_coord, i in zip(self.work, range(len(self.work))):
+        for i in range(work_n):
+            w, h = random.randrange(0, width), random.randrange(0, height)
             work = Work(i, self)
-            self.grid.place_agent(work, work_coord)
+            self.grid.place_agent(work, (w, h))
+            self.work.append((w, h))
 
         # build recreations
-        for rec_coord, i in zip(self.recreation, range(len(self.recreation))):
+        for i in range(rec_n):
+            w, h = random.randrange(0, width), random.randrange(0, height)
             recreation = Recreation(i, self)
-            self.grid.place_agent(recreation, rec_coord)
+            self.grid.place_agent(recreation, (w, h))
+            self.recreation.append((w, h))
 
         # infected agent
         for i in range(self.sick_agent):

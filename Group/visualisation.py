@@ -19,11 +19,11 @@ def agent_portrayal(agent):
     elif isinstance(agent, Work):
         portrayal["Color"] = "gray"
         portrayal["Layer"] = 0
-        portrayal["r"] = 10
+        portrayal["r"] = 2
     elif isinstance(agent, Recreation):
         portrayal["Color"] = "orange"
         portrayal["Layer"] = 0
-        portrayal["r"] = 10
+        portrayal["r"] = 2
 
     return portrayal
 
@@ -44,8 +44,8 @@ server = ModularServer(BaseModel,
                            "sick_N": 10,
                            "width": 100,
                            "height": 100,
-                           "work_coords": [(20, 15), (20, 30), (20, 45), (20, 60), (20, 75)],
-                           "rec_coords": [(80, 30), (80, 50), (80, 70)]
+                           "work_n": 15,
+                           "rec_n": 5
                        })
 server.port = 8521 # The default
 server.launch()
