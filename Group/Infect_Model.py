@@ -25,7 +25,7 @@ def build_work_recreation(model, start_h, start_w, size, type_build):
 
 class BaseModel(Model):
     """A model with some number of agents."""
-    def __init__(self, healthy_N, sick_N, width, height, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
+    def __init__(self, healthy_N, sick_N, width, height, work_coords, rec_coords, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
         self.parallel_amount = 16
         self.healthy_agents = healthy_N
         self.sick_agent = sick_N
@@ -35,16 +35,18 @@ class BaseModel(Model):
         self.schedule = SimultaneousActivation(self)
         self.running = True
         self.date = ini_date
-        self.work = []
-        self.recreation = []
+        self.work = work_coords
+        self.recreation = rec_coords
 
         # build work
-        build_work_recreation(self, 5, 4, 7, "work")
-        build_work_recreation(self, 30, 35, 7, "work")
+        for work_coord, i in zip(self.work, range(len(self.work))):
+            work = Work(i, self)
+            self.grid.place_agent(work, work_coord)
 
         # build recreations
-        build_work_recreation(self, 2, 80, 5, "recreation")
-        build_work_recreation(self, 90, 90, 5, "recreation")
+        for rec_coord, i in zip(self.recreation, range(len(self.recreation))):
+            recreation = Recreation(i, self)
+            self.grid.place_agent(recreation, rec_coord)
 
         # infected agent
         for i in range(self.sick_agent):

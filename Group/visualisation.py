@@ -4,6 +4,7 @@ from mesa.visualization.modules import ChartModule
 from Infect_Agents import Infect_Agent, Work, Recreation
 from Infect_Model import BaseModel
 
+
 def agent_portrayal(agent):
     portrayal = {"Shape": "circle",
                  "Filled": "true",
@@ -16,13 +17,16 @@ def agent_portrayal(agent):
         portrayal["Color"] = "green"
         portrayal["Layer"] = 1
     elif isinstance(agent, Work):
-        portrayal["Color"] = "purple"
+        portrayal["Color"] = "gray"
         portrayal["Layer"] = 0
+        portrayal["r"] = 10
     elif isinstance(agent, Recreation):
         portrayal["Color"] = "orange"
         portrayal["Layer"] = 0
-        
+        portrayal["r"] = 10
+
     return portrayal
+
 
 # grid = CanvasGrid(agent_portrayal, vakjes_x, vakjes_y, aantal_x_pixel, aantal_y_pixel)
 grid = CanvasGrid(agent_portrayal, 100, 100, 1000, 1000)
@@ -35,7 +39,13 @@ server = ModularServer(BaseModel,
                        [grid,chart],
                        "Infected model",
                     #    {"N":250,"width":100, "height":100})
-                       {"healthy_N":250,"sick_N":10, "width":100, "height":100})
+                       {
+                           "healthy_N": 250,
+                           "sick_N": 10,
+                           "width": 100,
+                           "height": 100,
+                           "work_coords": [(20, 15), (20, 30), (20, 45), (20, 60), (20, 75)],
+                           "rec_coords": [(80, 30), (80, 50), (80, 70)]
+                       })
 server.port = 8521 # The default
 server.launch()
-
