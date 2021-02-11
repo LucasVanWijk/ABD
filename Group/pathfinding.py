@@ -8,6 +8,8 @@ def get_positions(coordinate1,coordinate2):
             (including destination position, excluding current position)
             (diagonal travel is possible)
     '''
+
+    
     x_diff = coordinate2[0] - coordinate1[0]
     y_diff = coordinate2[1] - coordinate1[1]
 
@@ -23,6 +25,15 @@ def get_positions(coordinate1,coordinate2):
     return cells
 
 def find_closest_cell(all_cell, pos):
+    '''
+    Given a list of all cells and a current positon it wil find the cell that is closest to it's current position
+
+    :param all_cell: list of tuples 
+    :param pos: tuple of current position
+    :return: tuple out of all_cell which is the closest to pos
+    '''
+
+
     closest = None
     distance = 1000000
     if pos == None:

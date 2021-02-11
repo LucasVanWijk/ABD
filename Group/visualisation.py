@@ -7,6 +7,12 @@ from mesa.visualization.UserParam import UserSettableParameter
 
 
 def agent_portrayal(agent):
+    """ Determins how a agent needs to be portrayed. A agent is passed. 
+    Depending on there charasteristics they will be portrayed a certain way.
+    
+    :param agent: a agent of type agent
+    :returns portrayal: a portrayal object"""
+
     portrayal = {"Shape": "circle",
                  "Filled": "true",
                  "r": 0.5}
