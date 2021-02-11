@@ -38,14 +38,12 @@ class Infect_Agent(Agent):
 
 
     def infect_other(self):
-        surround = self.model.grid.get_neighborhood(self.pos,moore=True,include_center=False)
-        for cell in surround:
-            cellmates = self.model.grid.get_cell_list_contents([cell])
-            if len(cellmates) > 0:
-                for agent in cellmates:
-                    if isinstance(agent, Infect_Agent):
-                        if random.random()<self.model.infect_chanse:
-                            agent.infected = True
+        surround = self.model.grid.get_neighbors(self.pos,moore=True,include_center=False)
+        if len(surround) > 0:
+            for agent in surround:
+                if isinstance(agent, Infect_Agent):
+                    if random.randint(0,100)<self.model.infect_chanse:
+                        agent.infected = True
 
     def step(self):
         self.move(self.model.date)

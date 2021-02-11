@@ -26,7 +26,7 @@ def build_work_recreation(model, start_h, start_w, size, type_build):
 
 class BaseModel(Model):
     """A model with some number of agents."""
-    def __init__(self, healthy_N, sick_N, width, height, work_n, rec_n, infect_chanse=0.2, seed=41, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
+    def __init__(self, healthy_N, sick_N, width, height, work_n, rec_n, infect_chanse=20, seed=41, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
         self.parallel_amount = 16
         self.healthy_agents = healthy_N
         self.sick_agent = sick_N
