@@ -11,19 +11,6 @@ def compute_infected(model):
     return sum([1 if agent.infected else 0 for agent in model.schedule.agents ])
 
 
-def build_work_recreation(model, start_h, start_w, size, type_build):
-    for h in range(start_h, start_h + size):
-        for w in range(start_w, start_w + size):
-            if type_build == "work":
-                work = Work(int(str(h) + "0" + str(w)), model)
-                model.grid.place_agent(work, (w, h))
-                model.work.append((w, h))
-            elif type_build == "recreation":
-                recreation = Recreation(int(str(h) + "0" + str(w)), model)
-                model.grid.place_agent(recreation, (w, h))
-                model.recreation.append((w, h))
-
-
 class BaseModel(Model):
     """A model with some number of agents."""
     def __init__(self, healthy_N, sick_N, width, height, work_n, rec_n, infect_chanse=0.2, seed=41, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
