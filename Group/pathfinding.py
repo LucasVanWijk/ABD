@@ -21,3 +21,18 @@ def get_positions(coordinate1,coordinate2):
     cells = [(x,y) for x,y in zip(lst_x,lst_y)][1:]
 
     return cells
+
+def find_closest_cell(all_cell, pos):
+    closest = None
+    distance = 1000000
+    if pos == None:
+        return None
+
+    else:
+        for cell in all_cell:
+            xDif = abs(cell[0] - pos[0])
+            yDif = abs(cell[1] - pos[1])
+            if (xDif + yDif) < distance:
+                distance = (xDif + yDif)
+                closest = cell
+        return closest

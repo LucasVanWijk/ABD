@@ -26,7 +26,7 @@ def build_work_recreation(model, start_h, start_w, size, type_build):
 
 class BaseModel(Model):
     """A model with some number of agents."""
-    def __init__(self, healthy_N, sick_N, width, height, work_n, rec_n, seed=41, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
+    def __init__(self, healthy_N, sick_N, width, height, work_n, rec_n, infect_chanse=0.2, seed=41, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
         self.parallel_amount = 16
         self.healthy_agents = healthy_N
         self.sick_agent = sick_N
@@ -38,6 +38,7 @@ class BaseModel(Model):
         self.date = ini_date
         self.work = []
         self.recreation = []
+        self.infect_chanse = infect_chanse
         random.seed(seed)
 
         # build work
@@ -56,20 +57,20 @@ class BaseModel(Model):
 
         # infected agent
         for i in range(self.sick_agent):
-            a = Infect_Agent(i, self,True)
-            self.schedule.add(a)
-            # Add the agent to a random grid cell
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
+            a = Infect_Agent(i, self, (x,y), infected=True)
+            self.schedule.add(a)
+            # Add the agent to a random grid cell
             self.grid.place_agent(a, (x, y))
 
         # Create healthy agents
         for i in range(self.sick_agent,self.sick_agent+ self.healthy_agents):
-            a = Infect_Agent(i, self)
-            self.schedule.add(a)
-            # Add the agent to a random grid cell
             x = self.random.randrange(self.grid.width)
             y = self.random.randrange(self.grid.height)
+            a = Infect_Agent(i, self, (x,y), infected=True)
+            self.schedule.add(a)
+            # Add the agent to a random grid cell
             self.grid.place_agent(a, (x, y))
         
         self.datacollector = DataCollector(

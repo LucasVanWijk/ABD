@@ -1,14 +1,16 @@
 from mesa import Agent
-from Find_Closest_Cell import find
-from pathfinding import  get_positions
+
+from pathfinding import  get_positions, find_closest_cell
+import random
 
 class Infect_Agent(Agent):
     """ An agent with fixed initial wealth."""
-    def __init__(self, unique_id, model,infected=False):
+    def __init__(self, unique_id, model, home, infected):
         super().__init__(unique_id, model)
         self.infected = infected
-        self.closest_rec = find(self.model.recreation, self.pos)
-        self.closest_work = find(self.model.work, self.pos)
+        self.closest_rec = find_closest_cell(self.model.recreation, self.pos)
+        self.closest_work = find_closest_cell(self.model.work, self.pos)
+        self.home = home
         self.move_que = []
 
     def move(self, time):
@@ -28,7 +30,7 @@ class Infect_Agent(Agent):
             self.move_que = get_positions(self.pos, self.closest_rec)
 
         elif 19 == time.hour and time.minute == 0:
-            self.move_que = get_positions(self.pos, self.model.grid.find_empty())
+            self.move_que = get_positions(self.pos, self.home)
         
         if len(self.move_que) > 0:
             self.model.grid.move_agent(self, self.move_que[0])
@@ -42,7 +44,8 @@ class Infect_Agent(Agent):
             if len(cellmates) > 0:
                     for agent in cellmates:
                         if isinstance(agent, Infect_Agent):
-                            agent.infected = True
+                            if random.random()<self.model.infect_chanse:
+                                agent.infected = True
 
     def step(self):
         self.move(self.model.date)
