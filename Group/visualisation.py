@@ -3,6 +3,7 @@ from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import ChartModule
 from Infect_Agents import Infect_Agent, Work, Recreation
 from Infect_Model import BaseModel
+from mesa.visualization.UserParam import UserSettableParameter
 
 
 def agent_portrayal(agent):
@@ -33,19 +34,19 @@ grid = CanvasGrid(agent_portrayal, 100, 100, 1000, 1000)
 chart = ChartModule([{"Label": "infected",
                       "Color": "Green"}],
                     data_collector_name='datacollector')
-
+model_params = {
+    "width": 100,
+    "height": 100,
+    "healthy_N": UserSettableParameter("slider", "amount healthy", 250, 1, 500),
+    "sick_N": UserSettableParameter("slider", "amount sick", 250, 1, 500),
+    "work_n": UserSettableParameter("slider", "amount work locations", 20, 1, 50),
+    "rec_n": UserSettableParameter("slider", "amount recreation locations", 20, 1, 50)
+}
 
 server = ModularServer(BaseModel,
                        [grid,chart],
                        "Infected model",
-                    #    {"N":250,"width":100, "height":100})
-                       {
-                           "healthy_N": 250,
-                           "sick_N": 10,
-                           "width": 100,
-                           "height": 100,
-                           "work_n": 15,
-                           "rec_n": 5
-                       })
+                       model_params
+                       )
 server.port = 8521 # The default
 server.launch()
