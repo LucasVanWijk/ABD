@@ -1,5 +1,5 @@
 from mesa import Model
-from parallel import SimultaneousActivation
+from mesa.time import SimultaneousActivation
 from mesa.space import NetworkGrid
 from Infect_Agents import Infect_Agent, Work, Recreation
 from mesa.datacollection import DataCollector
@@ -30,19 +30,29 @@ class BaseModel(Model):
         self.infect_chanse = infect_chanse
         random.seed(seed)
 
-        # # build work
-        # for i in range(work_n):
-        #     w, h = random.randrange(0, width), random.randrange(0, height)
-        #     work = Work(i, self)
-        #     self.network.place_agent(work, (w, h))
-        #     self.work.append((w, h))
-        #
-        # # build recreations
-        # for i in range(rec_n):
-        #     w, h = random.randrange(0, width), random.randrange(0, height)
-        #     recreation = Recreation(i, self)
-        #     self.network.place_agent(recreation, (w, h))
-        #     self.recreation.append((w, h))
+        # build work
+        self.work = random.sample(range(n_nodes), k=work_n)
+        for w_node in self.work:
+            self.grid.G.nodes[w_node]["type"] = "work"
+
+        # build recreation
+        nodes = list(range(n_nodes))
+        for n in self.work:
+            nodes.remove(n)
+        self.recreation = random.sample(nodes, k=rec_n)
+        for r_node in self.recreation:
+            self.grid.G.nodes[r_node]["type"] = "recreation"
+
+        # build empty
+        nodes = list(range(n_nodes))
+        for n in self.work:
+            nodes.remove(n)
+        for n in self.recreation:
+            nodes.remove(n)
+        for e_node in nodes:
+            self.grid.G.nodes[e_node]["type"] = "empty"
+
+
         #
         # # infected agent
         # for i in range(self.sick_agent):
