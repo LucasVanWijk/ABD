@@ -57,6 +57,11 @@ class BaseModel(Model):
         infected_houses = random.sample(houses, k=self.sick_agent)
         for house in infected_houses:
             house[1]["agent"][0].infected = True
+        
+        for agent_type in self.agent_types:
+            target_houses = random.sample(houses, k=agent_type[0])
+            for house in target_houses:
+                house[1]["agent"][0].demo = agent_type[1]
 
         self.datacollector = DataCollector(
             model_reporters={"infected": compute_infected})

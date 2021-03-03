@@ -13,10 +13,7 @@ class Infect_Agent(Agent):
         self.fear = 1
         self.demo = demo()
         self.current_loc = None
-        self.closest = pop_closest_dict(home)
-        
-        def find_closest_cell():
-            
+        self.closest = pop_closest_dict(home)            
 
         def pop_closest_dict(home):
             network_types = self.model.network_types
