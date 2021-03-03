@@ -7,4 +7,4 @@ class demo():
 
 class student(demo):
     behaviorDict = {"9:00": (100, "School"),
-                    "15:00": (False, "Recreation")}
+                    "15:00": (80, "Recreation")}
