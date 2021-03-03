@@ -1,46 +1,52 @@
 from mesa import Agent
-
+from demographic import demo
 from pathfinding import get_positions, find_closest_cell
 import random
 
 
 class Infect_Agent(Agent):
     """ An agent with fixed initial wealth."""
-    def __init__(self, unique_id, model, home, infected):
+    def __init__(self, unique_id, model, home, infected, altruist):
         super().__init__(unique_id, model)
         self.infected = infected
+        self.altruist = altruist
+        self.home = home
+        self.fear = 1
+        self.demo = demo()
         self.closest_rec = None
         self.closest_work = None
-        self.home = home
-        self.move_que = []
+        self.currentLoc = None
+        self.closest = pop_closest_dict(home)
+
+    def popClosestDict(home, network_types):
+        get_dict = lambda cell_id, network_types: {n_type:find_closest_cell(cell_id, n_type) for n_type in network_types}
+        home_dict = get_dict(home, network_types)
+        closest_dict = {}
+        for key in home_dict:
+
+
+
+
+
+
+        {}
+
 
     def move(self, time):
-        # possible_steps = self.model.network.get_neighborhood(
-        #     self.pos,
-        #     moore=True,
-        #     include_center=False)
-        # new_position = self.random.choice(possible_steps)
-        # self.model.network.move_agent(self, new_position)
-
-        if 8 == time.hour and time.minute == 0:
-            self.closest_work = find_closest_cell(self.model.work, self.pos)
-            self.move_que = get_positions(self.pos, self.closest_work)
-        
-        elif 17 == time.hour and time.minute == 0:
-            self.closest_rec = find_closest_cell(self.model.recreation, self.pos)
-            self.move_que = get_positions(self.pos, self.closest_rec)
-
-        elif 19 == time.hour and time.minute == 0:
-            self.move_que = get_positions(self.pos, self.home)
-        
-        if len(self.move_que) > 0:
-            self.model.grid.move_agent(self, self.move_que[0])
-            self.move_que = self.move_que[1:]
+        if self.altruist:
+            loc_name, base_chanse = self.demo.getAction(time)
+            newChanse = base_chanse / self.fear
+            if random.randint(0,100) < newChanse:
+                locId = self.closest[self.current_loc][loc_name]
+                self.model.network.move_agent(self, locId)
+            else:
+                self.model.network.move_agent(self, self.home)
 
     def infect_other(self):
-        surround = self.model.grid.get_neighbors(self.pos,moore=True,include_center=False)
-        if len(surround) > 0:
-            for agent in surround:
+      '''functie op te bepalen wie er in dezelfde node voorkomen, en dus elke tick een kans hebben om geinfecteerd te worden.'''
+        current = self.model.grid.get_cell_list_contents(self.pos)
+        if len(current) > 0:
+            for agent in current:
                 if isinstance(agent, Infect_Agent):
                     if random.randint(0,100)<self.model.infect_chanse:
                         agent.infected = True
