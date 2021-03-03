@@ -20,9 +20,11 @@ class Infect_Agent(Agent):
 
     def popClosestDict(home, network_types):
         get_dict = lambda cell_id, network_types: {n_type:find_closest_cell(cell_id, n_type) for n_type in network_types}
+        to_determin_types = network_types[:].remove("Home")
         home_dict = get_dict(home, network_types)
         closest_dict = {}
         for key in home_dict:
+            to_determin_types = network_types[:].remove("Home")
 
 
 
