@@ -9,17 +9,12 @@ def network_portrayal(G):
 
     portrayal = dict()
     portrayal["nodes"] = []
-    for n in G.nodes.data():
-        color = "blue"
-        if n[1]["type"] == "work":
-            color = "gray"
-        elif n[1]["type"] == "recreation":
-            color = "orange"
 
+    for n in G.nodes.data():
         portrayal["nodes"].append(
             {
                 "size": 6,
-                "color": color,
+                "color": n[1]["color"],
             }
         )
 
@@ -34,26 +29,6 @@ def network_portrayal(G):
             }
         )
 
-
-    # portrayal["nodes"] = [
-    #     {
-    #         "size": 6,
-    #         "color": "blue",
-    #     }
-    #     for _ in G.nodes
-    # ]
-    #
-    # portrayal["edges"] = [
-    #     {
-    #         "source": source,
-    #         "target": target,
-    #         "color": "red",
-    #         "width": 1,
-    #     }
-    #     for (source, target) in G.edges
-    # ]
-
-
     return portrayal
 
 
@@ -63,17 +38,20 @@ class Time(TextElement):
         return str(time)
 
 
-network = NetworkModule(network_portrayal, 500, 500, library="d3")
+network = NetworkModule(network_portrayal, 800, 800, library="d3")
 chart = ChartModule([{"Label": "infected",
                       "Color": "Green"}],
                     data_collector_name='datacollector')
 model_params = {
-    "n_nodes": UserSettableParameter("slider", "amount nodes", 20, 1, 30),
-    "p_nodes": UserSettableParameter("number", "prob nodes", value=0.5),
+    "p_nodes": UserSettableParameter("number", "prob nodes", value=0.04),
     "healthy_N": UserSettableParameter("slider", "amount healthy", 250, 1, 500),
     "sick_N": UserSettableParameter("slider", "amount sick", 10, 1, 500),
-    "work_n": UserSettableParameter("slider", "amount work locations", 5, 1, 50),
-    "rec_n": UserSettableParameter("slider", "amount recreation locations", 5, 1, 50)
+    "network_params": [
+        (100, "House", None, "purple"),
+        (15, "Work", None, "yellow"),
+        (5, "rec", "bar", "green"),
+        (7, "rec", "park", "orange")
+    ]
 }
 
 server = ModularServer(BaseModel,

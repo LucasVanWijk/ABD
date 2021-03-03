@@ -1,7 +1,7 @@
 from mesa import Model
 from mesa.time import SimultaneousActivation
 from mesa.space import NetworkGrid
-from Infect_Agents import Infect_Agent, Work, Recreation
+from Infect_Agents import Infect_Agent
 from mesa.datacollection import DataCollector
 import datetime
 import random
@@ -14,43 +14,32 @@ def compute_infected(model):
 
 class BaseModel(Model):
     """A model with some number of agents."""
-    def __init__(self, healthy_N, sick_N, n_nodes, p_nodes, work_n, rec_n, infect_chanse=20, seed=41, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
+    def __init__(self, healthy_N, sick_N, network_params, p_nodes, infect_chanse=20, seed=41, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
         self.parallel_amount = 16
         self.healthy_agents = healthy_N
         self.sick_agent = sick_N
         self.min_per_step = min_per_step
         self.ini_date = ini_date
+
+        n_nodes = 0
+        for network_param in network_params:
+            n_nodes += network_param[0]
+
         self.G = nx.erdos_renyi_graph(n=n_nodes, p=p_nodes)
         self.grid = NetworkGrid(self.G)
         self.schedule = SimultaneousActivation(self)
         self.running = True
         self.date = ini_date
-        self.work = []
-        self.recreation = []
         self.infect_chanse = infect_chanse
         random.seed(seed)
 
-        # build work
-        self.work = random.sample(range(n_nodes), k=work_n)
-        for w_node in self.work:
-            self.grid.G.nodes[w_node]["type"] = "work"
-
-        # build recreation
-        nodes = list(range(n_nodes))
-        for n in self.work:
-            nodes.remove(n)
-        self.recreation = random.sample(nodes, k=rec_n)
-        for r_node in self.recreation:
-            self.grid.G.nodes[r_node]["type"] = "recreation"
-
-        # build empty
-        nodes = list(range(n_nodes))
-        for n in self.work:
-            nodes.remove(n)
-        for n in self.recreation:
-            nodes.remove(n)
-        for e_node in nodes:
-            self.grid.G.nodes[e_node]["type"] = "empty"
+        node_index = 0
+        for network_param in network_params:
+            for i in range(network_param[0]):
+                self.grid.G.nodes[node_index]["type"] = network_param[1]
+                self.grid.G.nodes[node_index]["sub_type"] = network_param[2]
+                self.grid.G.nodes[node_index]["color"] = network_param[3]
+                node_index += 1
 
 
         #
