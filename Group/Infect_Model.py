@@ -41,26 +41,23 @@ class BaseModel(Model):
                 self.grid.G.nodes[node_index]["color"] = network_param[3]
                 node_index += 1
 
+        # Create healthy agents
+        for n in self.grid.G.nodes.data():
+            if n[1]["type"] == "House":
+                agent = Infect_Agent(n[0], self, n[0], False, True)
+                self.grid.place_agent(agent, n[0])
 
-        #
-        # # infected agent
-        # for i in range(self.sick_agent):
-        #     x = self.random.randrange(self.network.width)
-        #     y = self.random.randrange(self.network.height)
-        #     a = Infect_Agent(i, self, (x,y), infected=True)
-        #     self.schedule.add(a)
-        #     # Add the agent to a random network cell
-        #     self.network.place_agent(a, (x, y))
-        #
-        # # Create healthy agents
-        # for i in range(self.sick_agent,self.sick_agent+ self.healthy_agents):
-        #     x = self.random.randrange(self.network.width)
-        #     y = self.random.randrange(self.network.height)
-        #     a = Infect_Agent(i, self, (x,y), infected=False)
-        #     self.schedule.add(a)
-        #     # Add the agent to a random network cell
-        #     self.network.place_agent(a, (x, y))
-        
+        # infect agents
+        houses = []
+        nodes = self.grid.G.nodes.data()
+        for node in nodes:
+            if node[1]["type"] == "House":
+                houses.append(node)
+
+        infected_houses = random.sample(houses, k=self.sick_agent)
+        for house in infected_houses:
+            house[1]["agent"][0].infected = True
+
         self.datacollector = DataCollector(
             model_reporters={"infected": compute_infected})
             
