@@ -24,7 +24,7 @@ class student(demo):
     behaviorDict = {9: (100, "School"),
                     15: (70, "Park"),
                     18: (70, "Shops"),
-                    20: (100, "Home")
+                    20: (100, "Home")}
 
     behaviorDict_wk = {
                     9: (100, "Home"),
