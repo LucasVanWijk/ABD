@@ -1,6 +1,5 @@
 from mesa import Agent
 from demographic import demo
-from pathfinding import get_positions, find_closest_cell
 import random
 
 
@@ -13,26 +12,25 @@ class Infect_Agent(Agent):
         self.home = home
         self.fear = 1
         self.demo = demo()
-        self.closest_rec = None
-        self.closest_work = None
-        self.currentLoc = None
+        self.current_loc = None
         self.closest = pop_closest_dict(home)
+        
+        def find_closest_cell():
+            
 
-    def popClosestDict(home, network_types):
-        get_dict = lambda cell_id, network_types: {n_type:find_closest_cell(cell_id, n_type) for n_type in network_types}
-        to_determin_types = network_types[:].remove("Home")
-        home_dict = get_dict(home, network_types)
-        closest_dict = {}
-        for key in home_dict:
+        def pop_closest_dict(home):
+            network_types = self.model.network_types
+            #get_dict = lambda cell_id, network_types: {n_type:find_closest_cell(cell_id, n_type) for n_type in network_types}
+            get_dict = lambda cell_id, network_types: {n_type:home for n_type in network_types}
             to_determin_types = network_types[:].remove("Home")
-
-
-
-
-
-
-        {}
-
+            home_dict = get_dict(home, to_determin_types)
+            closest_dict = {}
+            closest_dict["Home"] = home_dict
+            for key in home_dict:
+                to_determin_types = network_types[:].remove(key)
+                val = home_dict[key]
+                closest_dict[val] = get_dict(val, to_determin_types)
+            return closest_dict
 
     def move(self, time):
         if self.altruist:
@@ -41,16 +39,18 @@ class Infect_Agent(Agent):
             if random.randint(0,100) < newChanse:
                 locId = self.closest[self.current_loc][loc_name]
                 self.model.network.move_agent(self, locId)
+                self.current_loc = locId
             else:
                 self.model.network.move_agent(self, self.home)
+                self.current_loc = self.home
 
     def infect_other(self):
-      '''functie op te bepalen wie er in dezelfde node voorkomen, en dus elke tick een kans hebben om geinfecteerd te worden.'''
+        """functie op te bepalen wie er in dezelfde node voorkomen, en dus elke tick een kans hebben om geinfecteerd te worden."""
         current = self.model.grid.get_cell_list_contents(self.pos)
         if len(current) > 0:
             for agent in current:
                 if isinstance(agent, Infect_Agent):
-                    if random.randint(0,100)<self.model.infect_chanse:
+                    if random.randint(0,100) < self.model.infect_chanse:
                         agent.infected = True
 
     def step(self):
@@ -58,15 +58,6 @@ class Infect_Agent(Agent):
         if self.infected:
             self.infect_other()
 
-
-class Work(Agent):
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
-
-
-class Recreation(Agent):
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
 
 
 
