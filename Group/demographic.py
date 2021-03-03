@@ -7,7 +7,7 @@ class demo():
 
 
 class kind(demo):
-    '''leeftijd: 0-16''''
+    '''leeftijd: 0-16'''
     behaviorDict = {9: (100, "School"),
                     15: (70, "Park"),
                     17: (100, "Home")}
@@ -20,7 +20,7 @@ class kind(demo):
 
 
 class student(demo):
-    '''leeftijd: 16-25''''
+    '''leeftijd: 16-25'''
     behaviorDict = {9: (100, "School"),
                     15: (70, "Park"),
                     18: (70, "Shops"),
@@ -33,7 +33,7 @@ class student(demo):
                     20: (100, "Home")}
 
 class volwassen_onder_45(demo):
-    '''leeftijd: 25-44''''
+    '''leeftijd: 25-44'''
     behaviorDict = {9: (100, "Work"),
                     17: (70, "Shops"),
                     20: (100, "Home")}
@@ -45,7 +45,7 @@ class volwassen_onder_45(demo):
                     22: (100, "Home")}
 
 class volwassen_onder_45(demo):
-    '''leeftijd: 45-65''''
+    '''leeftijd: 45-65'''
     behaviorDict = {9: (100, "Home"),
                     17: (70, "Shops"),
                     20: (100, "Home")}
@@ -57,7 +57,7 @@ class volwassen_onder_45(demo):
                     20: (100, "Home")}
 
 class senioren(demo):
-    '''leeftijd: 65+''''
+    '''leeftijd: 65+'''
     behaviorDict = {9: (100, "Home"),
                     13: (70, "Park"),
                     16: (70, "Shops"),
