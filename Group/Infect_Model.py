@@ -31,6 +31,7 @@ class BaseModel(Model):
         self.running = True
         self.date = ini_date
         self.infect_chanse = infect_chanse
+        self.agent_types = [()]
         random.seed(seed)
 
         node_index = 0

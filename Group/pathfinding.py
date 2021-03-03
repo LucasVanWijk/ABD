@@ -24,26 +24,3 @@ def get_positions(coordinate1,coordinate2):
 
     return cells
 
-def find_closest_cell(all_cell, pos):
-    '''
-    Given a list of all cells and a current positon it wil find the cell that is closest to it's current position
-
-    :param all_cell: list of tuples 
-    :param pos: tuple of current position
-    :return: tuple out of all_cell which is the closest to pos
-    '''
-
-
-    closest = None
-    distance = 1000000
-    if pos == None:
-        return None
-
-    else:
-        for cell in all_cell:
-            xDif = abs(cell[0] - pos[0])
-            yDif = abs(cell[1] - pos[1])
-            if (xDif + yDif) < distance:
-                distance = (xDif + yDif)
-                closest = cell
-        return closest

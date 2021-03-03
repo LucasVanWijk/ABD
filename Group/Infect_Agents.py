@@ -13,12 +13,36 @@ class Infect_Agent(Agent):
         self.fear = 1
         self.demo = demo()
         self.current_loc = None
-        self.closest = pop_closest_dict(home)            
+        self.closest = pop_closest_dict(home)
+
+        def move_to_recursion(node, desired_node_type):
+            '''
+            :param queue: list: [current node]
+            :param visited: list: [current node]
+            :param node: int/node: current node
+            :param desired_node_type: string: "school"
+            :return:
+            '''
+            
+            def recursive(queue,visited, node, desired_node_type):
+                s = queue.pop(0)
+                for neighbour in [i for i in model.G.neighbors(node)]:
+                    if neighbour not in visited:
+                        visited.append(neighbour)
+                        queue.append(neighbour)
+                        if model.G.nodes[neighbour]["type"] == desired_node_type:
+                            return neighbour
+                    node = neighbour
+                recursive(queue, visited, node, desired_node_type)
+
+            que = [node]
+            visited = [node]
+            return recursive(que, visited, node, desired_node_type)          
 
         def pop_closest_dict(home):
-            network_types = self.model.network_types
-            #get_dict = lambda cell_id, network_types: {n_type:find_closest_cell(cell_id, n_type) for n_type in network_types}
-            get_dict = lambda cell_id, network_types: {n_type:home for n_type in network_types}
+            network_types = model.network_types
+            get_dict = lambda cell_id, network_types: {n_type: move_to_recursion(cell_id, n_type) for n_type in network_types}
+            #get_dict = lambda cell_id, network_types: {n_type:home for n_type in network_types}
             to_determin_types = network_types[:].remove("Home")
             home_dict = get_dict(home, to_determin_types)
             closest_dict = {}
