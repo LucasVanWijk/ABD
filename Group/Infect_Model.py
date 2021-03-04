@@ -34,14 +34,14 @@ class BaseModel(Model):
         self.infect_chanse = infect_chanse
         self.demo_distribution = {Student: 10, Elderly: 10, Child: 10}
         self.network_types = [i[1] for i in network_params]
+        self.nodes_by_type = dict()
         random.seed(seed)
 
         node_index = 0
         for network_param in network_params:
             for i in range(network_param[0]):
                 self.grid.G.nodes[node_index]["type"] = network_param[1]
-                self.grid.G.nodes[node_index]["sub_type"] = network_param[2]
-                self.grid.G.nodes[node_index]["color"] = network_param[3]
+                self.grid.G.nodes[node_index]["color"] = network_param[2]
                 node_index += 1
 
 
@@ -67,9 +67,9 @@ class BaseModel(Model):
         for key in self.demo_distribution:
             all_dif_agent_demos += [key] * self.demo_distribution[key]
 
-        diff_demo_houses = random.sample(houses, k=sum(self.demo_distribution.values()))
-        for house in diff_demo_houses:
-            house[1]["agent"][0].demo = all_dif_agent_demos.pop()            
+        # split nodes by type
+        for n_type in self.network_types:
+            self.nodes_by_type[n_type] = [i[0] for i in self.grid.G.nodes.data() if i[1]["type"] == n_type]
 
         self.datacollector = DataCollector(
             model_reporters={"infected": compute_infected})
