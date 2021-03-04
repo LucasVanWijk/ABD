@@ -1,7 +1,6 @@
 from mesa.batchrunner import BatchRunner
-from Infect_Model import BaseModel, compute_infected
+from Infect_Model import BaseModel, compute_infected, compute_healthy, compute_recovered
 import matplotlib.pyplot as plt
-
 
 fixed_params = {
     "p_nodes": 0.04,
@@ -23,13 +22,17 @@ batch_run = BatchRunner(
     BaseModel,
     variable_params,
     fixed_params,
-    iterations=1,
+    iterations=10,
     max_steps=100,
-    model_reporters={"infected": compute_infected}
+    model_reporters={"healthy": compute_healthy,
+                    "infected": compute_infected,
+                    "recovered": compute_recovered}
 )
 
 batch_run.run_all()
 
 run_data = batch_run.get_model_vars_dataframe()
 plt.plot(run_data["sick_N"], run_data["infected"])
+plt.plot(run_data["healthy_N"], run_data["healthy"])
+plt.plot(run_data["recoverd_N"], run_data["recoverd"])
 plt.show()

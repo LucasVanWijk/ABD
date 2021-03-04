@@ -41,7 +41,12 @@ def run_visual():
 
     network = NetworkModule(network_portrayal, 800, 800, library="d3")
     chart = ChartModule([{"Label": "infected",
-                        "Color": "Green"}],
+                        "Color": "Green"},
+                        {"Label": "healthy",
+                        "Color": "Red"},
+                        {"Label": "recovered",
+                        "Color": "Blue"}
+                        ],
                         data_collector_name='datacollector')
     model_params = {
         "p_nodes": UserSettableParameter("number", "prob nodes", value=0.04),
@@ -66,3 +71,6 @@ def run_visual():
                         )
     server.port = 8521 # The default
     server.launch()
+
+if __name__ == "__main__":
+    run_visual()

@@ -8,10 +8,14 @@ import random
 import networkx as nx
 from demographic import *
 
+def compute_healthy(model):
+    return sum([1 if not agent.infected and not agent.recovered else 0 for agent in model.schedule.agents])
 
 def compute_infected(model):
     return sum([1 if agent.infected else 0 for agent in model.schedule.agents])
 
+def compute_recovered(model):
+    return sum([1 if agent.recovered else 0 for agent in model.schedule.agents])
 
 class BaseModel(Model):
     """A model with some number of agents."""
@@ -74,7 +78,9 @@ class BaseModel(Model):
 
 
         self.datacollector = DataCollector(
-            model_reporters={"infected": compute_infected})
+            model_reporters={"healthy": compute_healthy,
+                            "infected": compute_infected,
+                            "recovered": compute_recovered})
             
     def step(self):
         #time = self.ini_date + datetime.timedelta(minutes= self.min_per_step * self.schedule.time)
