@@ -32,7 +32,7 @@ batch_run = BatchRunner(
 batch_run.run_all()
 
 run_data = batch_run.get_model_vars_dataframe()
-plt.plot(run_data["sick_N"], run_data["infected"])
-plt.plot(run_data["healthy_N"], run_data["healthy"])
-plt.plot(run_data["recoverd_N"], run_data["recoverd"])
+plt.plot(run_data["infected"])
+plt.plot(run_data["healthy"])
+#plt.plot(run_data["recovered"])
 plt.show()
