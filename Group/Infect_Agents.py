@@ -3,6 +3,7 @@ from demographic import demo
 import random
 import queue
 import networkx as nx
+import Infect_function as ifunc
 
 
 class Infect_Agent(Agent):
@@ -53,9 +54,14 @@ class Infect_Agent(Agent):
                     locId = self.closest[loc_name]
                     self.model.grid.move_agent(self, locId)
                     self.current_loc_type = loc_name
+                else:
+                    self.model.network.move_agent(self, self.home)
+                    self.current_loc_type = self.home
             else:
-                self.model.network.move_agent(self, self.home)
-                self.current_loc = self.home
+                locId = self.closest[loc_name]
+                self.model.grid.move_agent(self, locId)
+                self.current_loc_type = loc_name
+
 
     def infect_other(self):
         """functie op te bepalen wie er in dezelfde node voorkomen, en dus elke tick een kans hebben om geinfecteerd te worden."""
@@ -63,7 +69,7 @@ class Infect_Agent(Agent):
         if len(current) > 1:
             for agent in current:
                 if isinstance(agent, Infect_Agent):
-                    if random.randint(0,100) < self.model.infect_chanse:
+                    if random.randint(0,100) < ifunc.get_information_agent(self.current_loc_type):
                         agent.infected = True
 
     def step(self):
