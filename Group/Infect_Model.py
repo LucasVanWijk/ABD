@@ -52,6 +52,7 @@ class BaseModel(Model):
         for n in self.grid.G.nodes.data():
             if n[1]["type"] == "House":
                 agent = Infect_Agent(n[0], self, n[0], False, True, Adult)
+                self.schedule.add(agent)
                 self.grid.place_agent(agent, n[0])
 
         # infect agents
