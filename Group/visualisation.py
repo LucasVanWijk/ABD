@@ -44,15 +44,16 @@ chart = ChartModule([{"Label": "infected",
                     data_collector_name='datacollector')
 model_params = {
     "p_nodes": UserSettableParameter("number", "prob nodes", value=0.04),
-    "healthy_N": UserSettableParameter("slider", "amount healthy", 250, 1, 500),
+    "healthy_N": UserSettableParameter("slider", "amount healthy", 100, 1, 500),
     "sick_N": UserSettableParameter("slider", "amount sick", 10, 1, 500),
-    "network_params": [
-        (100, "House", None, "purple"),
-        (15, "Work", None, "yellow"),
-        (5, "Shop", "bar", "green"),
-
-    ]
 }
+
+model_params["network_params"] = [
+        (model_params["healthy_N"].value + model_params["sick_N"].value, "House", "purple"),
+        (15, "Work", "yellow"),
+        (5, "Shop", "green"),
+        (5, "Bar", "Brown")
+]
 
 server = ModularServer(BaseModel,
                        [network, Time(), chart],
