@@ -43,7 +43,10 @@ class BaseModel(Model):
                 self.grid.G.nodes[node_index]["type"] = network_param[1]
                 self.grid.G.nodes[node_index]["color"] = network_param[2]
                 node_index += 1
-
+        
+        # split nodes by type
+        for n_type in self.network_types:
+            self.nodes_by_type[n_type] = [i[0] for i in self.grid.G.nodes.data() if i[1]["type"] == n_type]
 
         # Create agents
         for n in self.grid.G.nodes.data():
@@ -67,9 +70,7 @@ class BaseModel(Model):
         for key in self.demo_distribution:
             all_dif_agent_demos += [key] * self.demo_distribution[key]
 
-        # split nodes by type
-        for n_type in self.network_types:
-            self.nodes_by_type[n_type] = [i[0] for i in self.grid.G.nodes.data() if i[1]["type"] == n_type]
+
 
         self.datacollector = DataCollector(
             model_reporters={"infected": compute_infected})

@@ -19,14 +19,19 @@ class Infect_Agent(Agent):
 
 
         def find(node_source, type_of_node, model):
-            all_nodes = model.temp_node
+            all_nodes = model.nodes_by_type[type_of_node]
             network = model.G
-            shortest = [0] * 99
+            shortest = None
             for t in all_nodes:
-                shortest_path =  nx.shortest_path(network, source=node_source, target=t)
-                if len(shortest_path) < len(shortest):
-                    shortest = shortest_path
+                if nx.has_path(network, source=node_source, target=t):
+                    shortest_path =  nx.shortest_path(network, source=node_source, target=t)
+                    if shortest == None or len(shortest_path) < len(shortest):
+                        shortest = shortest_path
+            
+            if shortest is not None:
                 return shortest[-1]
+            else:
+                return None
 
 
         def pop_closest_dict(home):
