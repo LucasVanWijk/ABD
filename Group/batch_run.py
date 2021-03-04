@@ -17,27 +17,27 @@ fixed_params = {
     ]
 }
 
-variable_params = {"sick_N": [10, 20, 30, 40 , 50]}
+# variable_params = {"sick_N": [10, 20, 30, 40 , 50]}
 
-batch_run = BatchRunner(
-    BaseModel,
-    variable_params,
-    fixed_params,
-    iterations=1,
-    max_steps=100,
-    model_reporters={"healthy": compute_healthy,
-                    "infected": compute_infected,
-                    "recovered": compute_recovered}
-)
+# batch_run = BatchRunner(
+#     BaseModel,
+#     variable_params,
+#     fixed_params,
+#     iterations=1,
+#     max_steps=100,
+#     model_reporters={"healthy": compute_healthy,
+#                     "infected": compute_infected,
+#                     "recovered": compute_recovered}
+# )
 
-# #batch_run.run_all()
+# # #batch_run.run_all()
 
-# run_data = batch_run.get_model_vars_dataframe()
-# print(run_data)
-# plt.plot(run_data["infected"])
-# plt.plot(run_data["healthy"])
-# #plt.plot(run_data["recovered"])
-# plt.show()
+# # run_data = batch_run.get_model_vars_dataframe()
+# # print(run_data)
+# # plt.plot(run_data["infected"])
+# # plt.plot(run_data["healthy"])
+# # #plt.plot(run_data["recovered"])
+# # plt.show()
 
 
 m = BaseModel(**fixed_params)
@@ -50,6 +50,6 @@ for i in range(1000):
 gini = m.datacollector.get_model_vars_dataframe()
 wow = gini["infected"]
 print(wow)
-#wow.groupby(wow.index // 24).sum()
+wow = wow.groupby(wow.index // 24).mean()
 plt.plot(wow)
 plt.show()

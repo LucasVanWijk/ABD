@@ -19,6 +19,7 @@ class Infect_Agent(Agent):
         self.fear = 1
         self.demo = demo_class
         self.current_loc_type = "House"
+        
 
         def find(node_source, type_of_node, model):
             all_nodes = model.nodes_by_type[type_of_node]
