@@ -54,18 +54,22 @@ class Infect_Agent(Agent):
                 newChanse = base_chanse / self.fear
                 if random.randint(0,100) < newChanse:
                     locId = self.closest[loc_name]
-                    print(locId)
+                    #print(locId)
                     self.model.grid.move_agent(self, locId)
                     self.current_loc_type = loc_name
  
                 else:
-                    print(self.home)
+                    #print(self.home)
                     self.model.grid.move_agent(self, self.home)
                     self.current_loc_type = self.home
         except:
             #locId = self.closest[loc_name]
-            self.model.grid.move_agent(self, self.home)
-            self.current_loc_type = "House"
+            try:
+                self.model.grid.move_agent(self, self.home)
+                self.current_loc_type = "House"
+            except:
+                self.model.grid.place_agent(self, self.home)
+                self.current_loc_type = "House"
 
 
     def infect_other(self):
