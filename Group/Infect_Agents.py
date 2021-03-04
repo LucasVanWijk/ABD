@@ -100,11 +100,21 @@ class Infect_Agent(Agent):
                     if random.randint(0,100) < ifunc.get_information_agent(self.current_loc_type):
                         # if self.infected_timer == 0 and not agent.recovered:
                         agent.infected = True
-        
-        return
+
+    def determin_fear(self):
+        p = self.model.percent_infected
+        if p > 25:
+            return 2
+        elif p > 50:
+            return 3
+        elif p > 75:
+            return 4
+        else:
+            return 1
 
     def step(self):
         self.move(self.model.date)
+        self.fear = self.determin_fear()
         if self.infected :
             self.infect_other()
 
