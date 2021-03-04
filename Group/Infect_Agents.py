@@ -48,28 +48,24 @@ class Infect_Agent(Agent):
         self.closest = pop_closest_dict(home)
 
     def move(self, time):
-        return_value = self.demo.getAction(self.demo, time)
-        if return_value != None:
-            
-            base_chanse, loc_name = return_value
+        try:
+            base_chanse, loc_name = self.demo.getAction(self.demo, time)
             if self.altruist:
-                
                 newChanse = base_chanse / self.fear
-                
                 if random.randint(0,100) < newChanse:
                     locId = self.closest[loc_name]
                     print(locId)
                     self.model.grid.move_agent(self, locId)
                     self.current_loc_type = loc_name
-
+ 
                 else:
                     print(self.home)
                     self.model.grid.move_agent(self, self.home)
                     self.current_loc_type = self.home
-            else:
-                locId = self.closest[loc_name]
-                self.model.grid.move_agent(self, locId)
-                self.current_loc_type = loc_name
+        except:
+            #locId = self.closest[loc_name]
+            self.model.grid.move_agent(self, self.home)
+            self.current_loc_type = "House"
 
 
     def infect_other(self):
