@@ -1,10 +1,11 @@
 from mesa.batchrunner import BatchRunner
 from Infect_Model import BaseModel, compute_infected
+import matplotlib.pyplot as plt
+
 
 fixed_params = {
     "p_nodes": 0.04,
     "healthy_N": 100,
-    "sick_N": 10,
     "network_params": [
         (110, "House", "Grey"),
         (25, "Work", "yellow"),
@@ -16,9 +17,9 @@ fixed_params = {
     ]
 }
 
-variable_params = None
+variable_params = {"sick_N": [10, 20, 30, 40 , 50]}
 
-batchrun = BatchRunner(
+batch_run = BatchRunner(
     BaseModel,
     variable_params,
     fixed_params,
@@ -27,4 +28,8 @@ batchrun = BatchRunner(
     model_reporters={"infected": compute_infected}
 )
 
-batchrun.run_all()
+batch_run.run_all()
+
+run_data = batch_run.get_model_vars_dataframe()
+plt.plot(run_data["sick_N"], run_data["infected"])
+plt.show()
