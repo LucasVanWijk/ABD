@@ -59,6 +59,26 @@ class Infect_Agent(Agent):
 
         self.closest = pop_closest_dict(home)
 
+    def fear_factor(self):
+        infection_percentage = self.model.percent_infected
+        
+        if infection_percentage < 25:
+            # case 1
+            pass
+
+        elif infection_percentage < 50:
+            # case 2
+            pass
+
+        elif infection_percentage < 75:
+            # case 3
+            pass
+
+        elif infection_percentage < 100:
+            # case 4
+            pass
+        return
+
     def move(self, time):
         if self.altruist:
             loc_name, base_chanse = self.demo.getAction(time)
