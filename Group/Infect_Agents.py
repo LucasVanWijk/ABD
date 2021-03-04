@@ -14,7 +14,7 @@ class Infect_Agent(Agent):
         self.home = home
         self.fear = 1
         self.demo = demo_class
-        self.current_loc = None
+        self.current_loc_type = "House"
 
 
 
@@ -46,21 +46,23 @@ class Infect_Agent(Agent):
         self.closest = pop_closest_dict(home)
 
     def move(self, time):
-        if self.altruist:
-            loc_name, base_chanse = self.demo.getAction(time)
-            newChanse = base_chanse / self.fear
-            if random.randint(0,100) < newChanse:
-                locId = self.closest[self.current_loc][loc_name]
-                self.model.network.move_agent(self, locId)
-                self.current_loc = locId
+        return_value = self.demo.getAction(self.demo, time)
+        if return_value != None:
+            if self.altruist:
+                base_chanse, loc_name = return_value
+                newChanse = base_chanse / self.fear
+                if random.randint(0,100) < newChanse:
+                    locId = self.closest[loc_name]
+                    self.model.grid.move_agent(self, locId)
+                    self.current_loc_type = loc_name
             else:
                 self.model.network.move_agent(self, self.home)
                 self.current_loc = self.home
 
     def infect_other(self):
         """functie op te bepalen wie er in dezelfde node voorkomen, en dus elke tick een kans hebben om geinfecteerd te worden."""
-        current = self.model.grid.get_cell_list_contents(self.pos)
-        if len(current) > 0:
+        current = self.model.grid.G.nodes[self.pos]["agent"]
+        if len(current) > 1:
             for agent in current:
                 if isinstance(agent, Infect_Agent):
                     if random.randint(0,100) < self.model.infect_chanse:

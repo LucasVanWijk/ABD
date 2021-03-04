@@ -49,10 +49,13 @@ model_params = {
 }
 
 model_params["network_params"] = [
-        (model_params["healthy_N"].value + model_params["sick_N"].value, "House", "purple"),
-        (15, "Work", "yellow"),
-        (5, "Shop", "green"),
-        (5, "Bar", "Brown")
+        (model_params["healthy_N"].value + model_params["sick_N"].value, "House", "Grey"),
+        (25, "Work", "yellow"),
+        (10, "School", "green"),
+        (5, "Shop", "Brown"),
+        (5, "Bar", "Brown"),
+        (5, "Park", "Brown"),
+        (2, "University", "Red")
 ]
 
 server = ModularServer(BaseModel,

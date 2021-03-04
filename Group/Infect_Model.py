@@ -15,7 +15,7 @@ def compute_infected(model):
 
 class BaseModel(Model):
     """A model with some number of agents."""
-    def __init__(self, healthy_N, sick_N, network_params, p_nodes, infect_chanse=20, seed=41, min_per_step=10,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
+    def __init__(self, healthy_N, sick_N, network_params, p_nodes, infect_chanse=20, seed=41, min_per_step=60,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
         self.parallel_amount = 16
         self.healthy_agents = healthy_N
         self.sick_agent = sick_N
