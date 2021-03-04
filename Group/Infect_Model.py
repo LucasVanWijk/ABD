@@ -3,6 +3,7 @@ from mesa.time import SimultaneousActivation
 from mesa.space import NetworkGrid
 from Infect_Agents import Infect_Agent
 from mesa.datacollection import DataCollector
+import CBS_csv_to_groupinfo 
 import datetime
 import random
 import networkx as nx
@@ -23,6 +24,8 @@ class BaseModel(Model):
         self.parallel_amount = 16
         self.healthy_agents = healthy_N
         self.sick_agent = sick_N
+        self.total_agents = healthy_N + sick_N
+        self.percent_infected = (sick_N / self.total_agents) * 100
         self.min_per_step = min_per_step
         self.ini_date = ini_date
 
@@ -36,10 +39,10 @@ class BaseModel(Model):
         self.running = True
         self.date = ini_date
         self.infect_chanse = infect_chanse
-        self.demo_distribution = {Student: 10, Elderly: 10, Child: 10}
         self.network_types = [i[1] for i in network_params]
         self.nodes_by_type = dict()
         random.seed(seed)
+
 
         node_index = 0
         for network_param in network_params:
@@ -47,18 +50,22 @@ class BaseModel(Model):
                 self.grid.G.nodes[node_index]["type"] = network_param[1]
                 self.grid.G.nodes[node_index]["color"] = network_param[2]
                 node_index += 1
-        
-        # split nodes by type
-        for n_type in self.network_types:
-            self.nodes_by_type[n_type] = [i[0] for i in self.grid.G.nodes.data() if i[1]["type"] == n_type]
 
         # Create agents
+        self.demo_distribution = {Child: 0,Student: 0, Adult:0, Elderly: 0}
+        age_dict = CBS_csv_to_groupinfo.get_info_piramide()
+        change_to_age_dict= {1: Child, 2: Student, 3: Adult, 4: Elderly}
+
         for n in self.grid.G.nodes.data():
             if n[1]["type"] == "House":
-                agent = Infect_Agent(n[0], self, n[0], False, True, Adult)
-                self.schedule.add(agent)
+                chance = random.uniform(0,1)
+                agent_type = change_to_age_dict[sum([1 if x < chance else 0 for x in age_dict.values()])]
+                agent = Infect_Agent(n[0], self, n[0], False, True, agent_type)
+                
                 self.grid.place_agent(agent, n[0])
+                self.demo_distribution[agent_type] += 1
 
+        
         # infect agents
         houses = []
         nodes = self.grid.G.nodes.data()
@@ -85,5 +92,6 @@ class BaseModel(Model):
     def step(self):
         #time = self.ini_date + datetime.timedelta(minutes= self.min_per_step * self.schedule.time)
         self.date = self.ini_date + datetime.timedelta(minutes= self.min_per_step * self.schedule.steps)
+        self.percent_infected = (compute_infected(self) / self.total_agents)*100
         self.datacollector.collect(self)
         self.schedule.step()
