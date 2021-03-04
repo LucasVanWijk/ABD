@@ -6,6 +6,7 @@ from mesa.datacollection import DataCollector
 import datetime
 import random
 import networkx as nx
+from demographic import *
 
 
 def compute_infected(model):
@@ -31,7 +32,8 @@ class BaseModel(Model):
         self.running = True
         self.date = ini_date
         self.infect_chanse = infect_chanse
-        self.agent_types = [()]
+        self.demo_distribution = {Student: 10, Elderly: 10, Child: 10}
+        self.network_types = [i[1] for i in network_params]
         random.seed(seed)
 
         node_index = 0
@@ -42,10 +44,11 @@ class BaseModel(Model):
                 self.grid.G.nodes[node_index]["color"] = network_param[3]
                 node_index += 1
 
-        # Create healthy agents
+
+        # Create agents
         for n in self.grid.G.nodes.data():
             if n[1]["type"] == "House":
-                agent = Infect_Agent(n[0], self, n[0], False, True)
+                agent = Infect_Agent(n[0], self, n[0], False, True, Adult)
                 self.grid.place_agent(agent, n[0])
 
         # infect agents
@@ -58,11 +61,15 @@ class BaseModel(Model):
         infected_houses = random.sample(houses, k=self.sick_agent)
         for house in infected_houses:
             house[1]["agent"][0].infected = True
-        
-        for agent_type in self.agent_types:
-            target_houses = random.sample(houses, k=agent_type[0])
-            for house in target_houses:
-                house[1]["agent"][0].demo = agent_type[1]
+
+
+        all_dif_agent_demos = []
+        for key in self.demo_distribution:
+            all_dif_agent_demos += [key] * self.demo_distribution[key]
+
+        diff_demo_houses = random.sample(houses, k=sum(self.demo_distribution.values()))
+        for house in diff_demo_houses:
+            house[1]["agent"][0].demo = all_dif_agent_demos.pop()            
 
         self.datacollector = DataCollector(
             model_reporters={"infected": compute_infected})

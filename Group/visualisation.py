@@ -49,8 +49,8 @@ model_params = {
     "network_params": [
         (100, "House", None, "purple"),
         (15, "Work", None, "yellow"),
-        (5, "rec", "bar", "green"),
-        (7, "rec", "park", "orange")
+        (5, "Shop", "bar", "green"),
+
     ]
 }
 
