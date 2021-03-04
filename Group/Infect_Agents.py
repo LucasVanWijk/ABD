@@ -55,7 +55,7 @@ class Infect_Agent(Agent):
                     self.model.grid.move_agent(self, locId)
                     self.current_loc_type = loc_name
                 else:
-                    self.model.network.move_agent(self, self.home)
+                    self.model.grid.move_agent(self, self.home)
                     self.current_loc_type = self.home
             else:
                 locId = self.closest[loc_name]
