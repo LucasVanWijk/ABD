@@ -42,12 +42,13 @@ class Infect_Agent(Agent):
 
         def find(node_source, type_of_node, all_nodes):
             all_paths =  nx.shortest_path(all_nodes, node_source)    
-            shortest_path = min(all_paths, key=len)
-            return shortest_path[-1]    
+            #shortest_path = min(all_paths, key=all_paths.get)
+            v = list(all_paths.values())
+            return all_paths[v[0][0]]    
 
 
         def pop_closest_dict(home):
-            network_types = model.network_types
+            network_types = model.network_types.copy()
             network_types.remove("House")
             closest_dict = {"House": home}
             for n_type in network_types:
@@ -55,8 +56,6 @@ class Infect_Agent(Agent):
                 closest_dict[n_type] = find(home, n_type, sub_network)
             
             return closest_dict
-        
-
 
         self.closest = pop_closest_dict(home)
 

@@ -6,7 +6,7 @@ class demo():
         return self.behaviorDict.get(time)
 
 
-class kind(demo):
+class Child(demo):
     '''leeftijd: 0-16'''
     behaviorDict = {9: (100, "School"),
                     15: (70, "Park"),
@@ -19,7 +19,7 @@ class kind(demo):
                     17: (100, "Home")}
 
 
-class student(demo):
+class Student(demo):
     '''leeftijd: 16-25'''
     behaviorDict = {9: (100, "School"),
                     15: (70, "Park"),
@@ -32,7 +32,7 @@ class student(demo):
                     18: (70, "Shops"),
                     20: (100, "Home")}
 
-class volwassen_onder_45(demo):
+class Adult(demo):
     '''leeftijd: 25-44'''
     behaviorDict = {9: (100, "Work"),
                     17: (70, "Shops"),
@@ -44,19 +44,8 @@ class volwassen_onder_45(demo):
                     16: (70, "Shops"),
                     22: (100, "Home")}
 
-class volwassen_onder_45(demo):
-    '''leeftijd: 45-65'''
-    behaviorDict = {9: (100, "Home"),
-                    17: (70, "Shops"),
-                    20: (100, "Home")}
 
-    behaviorDict_wk = {
-                    9: (100, "Home"),
-                    13: (70, "Park"),
-                    16: (70, "Shops"),
-                    20: (100, "Home")}
-
-class senioren(demo):
+class Elderly(demo):
     '''leeftijd: 65+'''
     behaviorDict = {9: (100, "Home"),
                     13: (70, "Park"),
@@ -69,6 +58,6 @@ class senioren(demo):
                     16: (70, "Shops"),
                     19: (100, "Home")}
 
-class geinfecteerd(demo):
+class Infected(demo):
     behaviorDict = {0: (100, "Home")}
     behaviorDict_wk = {0: (100, "Home")}
