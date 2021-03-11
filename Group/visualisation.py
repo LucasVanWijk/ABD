@@ -52,6 +52,7 @@ def run_visual():
         "p_nodes": UserSettableParameter("number", "prob nodes", value=0.04),
         "healthy_N": UserSettableParameter("slider", "amount healthy", 100, 1, 500),
         "sick_N": UserSettableParameter("slider", "amount sick", 10, 1, 500),
+        "altruism": UserSettableParameter("slider", "amount sick", 10, 1, 100)
     }
 
     model_params["network_params"] = [

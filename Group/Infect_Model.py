@@ -60,14 +60,15 @@ class BaseModel(Model):
         age_dict = CBS_csv_to_groupinfo.get_info_piramide()
         change_to_age_dict= {1: Child, 2: Student, 3: Adult, 4: Elderly}
 
-        altruist_left = round(self.total_agents * altruism)
+        altruist_left = round((self.total_agents) * (altruism / 100))
         # Distributes demographics
         for n in self.grid.G.nodes.data():
             if n[1]["type"] == "House":
                 chance = random.uniform(0,1)
                 agent_type = change_to_age_dict[sum([1 if x < chance else 0 for x in age_dict.values()])]
-                agent = Infect_Agent(n[0], self, n[0], False, True, agent_type)
+                agent = Infect_Agent(n[0], self, n[0], False, False, agent_type)
                 if altruist_left > 0:
+                    #print("Altruism {}".format(altruist_left))
                     agent.altruist = True
                     altruist_left -= 1
                 self.schedule.add(agent)

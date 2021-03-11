@@ -4,30 +4,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-
-# variable_params = {"sick_N": [10, 20, 30, 40 , 50]}
-
-# batch_run = BatchRunner(
-#     BaseModel,
-#     variable_params,
-#     fixed_params,
-#     iterations=1,
-#     max_steps=100,
-#     model_reporters={"healthy": compute_healthy,
-#                     "infected": compute_infected,
-#                     "recovered": compute_recovered}
-# )
-
-# # #batch_run.run_all()
-
-# # run_data = batch_run.get_model_vars_dataframe()
-# # print(run_data)
-# # plt.plot(run_data["infected"])
-# # plt.plot(run_data["healthy"])
-# # #plt.plot(run_data["recovered"])
-# # plt.show()
 container = pd.DataFrame()
-vars_alt = [1,10,20,50,100]
+vars_alt = [1,25,50,75,100]
 for altrui in vars_alt:
     fixed_params = {
     "altruism": altrui,
@@ -55,6 +33,15 @@ for altrui in vars_alt:
     infected = m.datacollector.get_model_vars_dataframe()["infected"]
     infected = infected.groupby(infected.index // 24).mean()
     container[altrui] = infected
-    
-plt.plot(container)
+
+
+
+print(container)    
+container.plot()
 plt.show()
+# f = pd.DataFrame()
+# f["1t25"] = container[1] - container[25]
+# f["25t50"] = container[25] - container[50]
+# f["75t100"] = container[75] - container[100]
+# f.plot()
+# plt.show()
