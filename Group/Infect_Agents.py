@@ -26,7 +26,8 @@ class Infect_Agent(Agent):
         #(env tells an agent relevant info)
         infected_sample_size = self.model.percent_infected
         self.fear = self.determin_fear(infected_sample_size)
-        time = <time>
+        #time = <time>
+        time = 0
         base_chance, loc_name = self.demo.getAction(self.demo, time)
         chance_to_move = base_chance / self.fear
         pass
@@ -78,10 +79,10 @@ class Infect_Agent(Agent):
 
     def move(self, time):
         try:
-            base_chanse, loc_name = self.demo.getAction(self.demo, time)
+            base_chance, loc_name = self.demo.getAction(self.demo, time)
             if self.altruist:
-                newChanse = base_chanse / self.fear
-                if random.randint(0,100) < newChanse:
+                newChance = base_chance / self.fear
+                if random.randint(0,100) < newChance:
                     locId = self.closest[loc_name]
                     self.model.grid.move_agent(self, locId)
                     self.current_loc_type = loc_name
