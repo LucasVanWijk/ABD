@@ -19,12 +19,16 @@ class Infect_Agent(Agent):
         self.fear = 1
         self.demo = demo_class
         self.current_loc_type = "House"
+        self.closest = self.pop_closest_dict(home)
 
     def make_percept_sentence(self):
         # TELL to an Agent: statement that asserts perception of info at given timestep
         #(env tells an agent relevant info)
         infected_sample_size = self.model.percent_infected
         self.fear = self.determin_fear(infected_sample_size)
+        time = <time>
+        base_chance, loc_name = self.demo.getAction(self.demo, time)
+        chance_to_move = base_chance / self.fear
         pass
 
     def make_action_query(self):
@@ -34,6 +38,7 @@ class Infect_Agent(Agent):
 
     def make_action_sentence(self):
         # TELL to an Agent: take action and asserts that chosen action was executed
+
         pass
 
     def find(self, node_source, type_of_node, model):
@@ -69,7 +74,7 @@ class Infect_Agent(Agent):
 
         return closest_dict
 
-    self.closest = pop_closest_dict(home)
+
 
     def move(self, time):
         try:
@@ -130,7 +135,7 @@ class Infect_Agent(Agent):
 
     def step(self):
         self.move(self.model.date)
-        self.fear = self.determin_fear()
+        self.fear = self.determin_fear(self.model.percent_infected)
         if self.infected :
             self.infect_other()
 
