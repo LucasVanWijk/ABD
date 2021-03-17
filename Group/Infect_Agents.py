@@ -19,7 +19,20 @@ class Infect_Agent(Agent):
         self.fear = 1
         self.demo = demo_class
         self.current_loc_type = "House"
-        
+
+        def make_percept_sentence():
+            # TELL to an Agent: statement that asserts perception of info at given timestep
+            #(env tells an agent relevant info)
+            pass
+
+        def make_action_query():
+            # ASK from Agent: constructs corresponding action to perception at given timestep
+            #(env asks an agent what action should be taken)
+            pass
+
+        def make_action_sentence():
+            # TELL to an Agent: take action and asserts that chosen action was executed
+            pass
 
         def find(node_source, type_of_node, model):
             all_nodes = model.nodes_by_type[type_of_node]

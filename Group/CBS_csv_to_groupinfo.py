@@ -10,7 +10,7 @@ def get_info_piramide():
         return -1
 
     #  https://opendata.cbs.nl/statline/#/CBS/nl/dataset/7461bev/table?ts=1614870199236
-    info = open("Group/Bevolking.csv", "r+").readlines()
+    info = open("Bevolking.csv", "r+").readlines()
     info = info[index_containing_substring(info,"0 tot 5"):-1]
     info = [x.rstrip() for x in info]
 
