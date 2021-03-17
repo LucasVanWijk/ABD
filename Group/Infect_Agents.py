@@ -52,18 +52,19 @@ class Infect_Agent(Agent):
     def make_action_sentence(self):
         # TELL to an Agent: take action and asserts that chosen action was executed
         # moves the agent
-        try:
-            if random.randint(0, 100) < self.chance_to_move:
-                locId = self.closest[self.desired_loc_name]
-                self.model.grid.move_agent(self, locId)
-                self.current_loc_type = self.desired_loc_name
-            else:
-                self.model.grid.move_agent(self, self.home)
-                self.current_loc_type = self.home
+        if self.chance_to_move != None:
+            try:
+                if random.randint(0, 100) < self.chance_to_move:
+                    locId = self.closest[self.desired_loc_name]
+                    self.model.grid.move_agent(self, locId)
+                    self.current_loc_type = self.desired_loc_name
+                else:
+                    self.model.grid.move_agent(self, self.home)
+                    self.current_loc_type = self.home
 
-        except:
-            self.model.grid.place_agent(self, self.home)
-            self.current_loc_type = "House"
+            except:
+                self.model.grid.place_agent(self, self.home)
+                self.current_loc_type = "House"
 
     def find(self, node_source, type_of_node, model):
         all_nodes = model.nodes_by_type[type_of_node]
