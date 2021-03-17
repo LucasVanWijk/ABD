@@ -25,22 +25,45 @@ class Infect_Agent(Agent):
         # TELL to an Agent: statement that asserts perception of info at given timestep
         #(env tells an agent relevant info)
         infected_sample_size = self.model.percent_infected
-        self.fear = self.determin_fear(infected_sample_size)
-        #time = <time>
-        time = 0
-        base_chance, loc_name = self.demo.getAction(self.demo, time)
-        chance_to_move = base_chance / self.fear
+        self.infected_sample_size= infected_sample_size
+        self.time = self.model.date
+        returns = self.demo.getAction(self.demo, self.time)
+        if returns != None:
+            self.base_chance, self.desired_loc_name = returns
+        else:
+            self.base_chance, self.desired_loc_name = (None,None)
         pass
 
     def make_action_query(self):
         # ASK from Agent: constructs corresponding action to perception at given timestep
         #(env asks an agent what action should be taken)
+        self.fear = self.determin_fear(self.infected_sample_size)
+        if self.base_chance != None:
+            if self.altruist:
+                self.chance_to_move = self.base_chance / self.fear
+            else:
+                self.chance_to_move = self.base_chance
+        else:
+            self.chance_to_move = None
+
+
         pass
 
     def make_action_sentence(self):
         # TELL to an Agent: take action and asserts that chosen action was executed
+        # moves the agent
+        try:
+            if random.randint(0, 100) < self.chance_to_move:
+                locId = self.closest[self.desired_loc_name]
+                self.model.grid.move_agent(self, locId)
+                self.current_loc_type = self.desired_loc_name
+            else:
+                self.model.grid.move_agent(self, self.home)
+                self.current_loc_type = self.home
 
-        pass
+        except:
+            self.model.grid.place_agent(self, self.home)
+            self.current_loc_type = "House"
 
     def find(self, node_source, type_of_node, model):
         all_nodes = model.nodes_by_type[type_of_node]
@@ -57,8 +80,8 @@ class Infect_Agent(Agent):
         for t in all_nodes:
             if len(self.model.grid.G.nodes[t]["agent"]) < max_for_type[type_of_node]:
                 if nx.has_path(network, source=node_source, target=t):
-                    shortest_path =  nx.shortest_path(network, source=node_source, target=t)
-                    if shortest == None or len(shortest_path):
+                    shortest_path = nx.shortest_path(network, source=node_source, target=t)
+                    if shortest == None or len(shortest_path)<len(shortest):
                         shortest = shortest_path
 
         if shortest is not None:
@@ -79,29 +102,17 @@ class Infect_Agent(Agent):
 
     def move(self, time):
         try:
-            base_chance, loc_name = self.demo.getAction(self.demo, time)
-            if self.altruist:
-                newChance = base_chance / self.fear
-                if random.randint(0,100) < newChance:
-                    locId = self.closest[loc_name]
-                    self.model.grid.move_agent(self, locId)
-                    self.current_loc_type = loc_name
- 
-                else:
-                    self.model.grid.move_agent(self, self.home)
-                    self.current_loc_type = self.home
-            else:
-                locId = self.closest[loc_name]
+            if random.randint(0, 100) < self.chance_to_move:
+                locId = self.closest[self.desired_loc_name]
                 self.model.grid.move_agent(self, locId)
-                self.current_loc_type = loc_name
+                self.current_loc_type = self.desired_loc_name
+            else:
+                self.model.grid.move_agent(self, self.home)
+                self.current_loc_type = self.home
 
         except:
-            try:
-                self.model.grid.move_agent(self, self.home)
-                self.current_loc_type = "House"
-            except:
-                self.model.grid.place_agent(self, self.home)
-                self.current_loc_type = "House"
+            self.model.grid.place_agent(self, self.home)
+            self.current_loc_type = "House"
 
 
     def infect_other(self):
@@ -125,21 +136,23 @@ class Infect_Agent(Agent):
 
     def determin_fear(self,infected_sample_size):
         p = infected_sample_size
-        if p > 25:
-            return 2
+        if p > 75:
+            return 4
         elif p > 50:
             return 3
-        elif p > 75:
-            return 4
+        elif p > 25:
+            return 2
         else:
             return 1
 
     def step(self):
-        self.move(self.model.date)
-        self.fear = self.determin_fear(self.model.percent_infected)
-        if self.infected :
+        # roept percet etc aan
+        self.make_percept_sentence()
+        self.make_action_query()
+        self.make_action_sentence()
+        # infect_other is not an conscious action of an Agent, so the action is not defined in make_action_sentence
+        if self.infected:
             self.infect_other()
-
 
 
 
