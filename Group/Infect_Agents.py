@@ -20,55 +20,56 @@ class Infect_Agent(Agent):
         self.demo = demo_class
         self.current_loc_type = "House"
 
-        def make_percept_sentence():
-            # TELL to an Agent: statement that asserts perception of info at given timestep
-            #(env tells an agent relevant info)
-            pass
+    def make_percept_sentence(self):
+        # TELL to an Agent: statement that asserts perception of info at given timestep
+        #(env tells an agent relevant info)
+        infected_sample_size = self.model.percent_infected
+        self.fear = self.determin_fear(infected_sample_size)
+        pass
 
-        def make_action_query():
-            # ASK from Agent: constructs corresponding action to perception at given timestep
-            #(env asks an agent what action should be taken)
-            pass
+    def make_action_query(self):
+        # ASK from Agent: constructs corresponding action to perception at given timestep
+        #(env asks an agent what action should be taken)
+        pass
 
-        def make_action_sentence():
-            # TELL to an Agent: take action and asserts that chosen action was executed
-            pass
+    def make_action_sentence(self):
+        # TELL to an Agent: take action and asserts that chosen action was executed
+        pass
 
-        def find(node_source, type_of_node, model):
-            all_nodes = model.nodes_by_type[type_of_node]
-            network = model.G
-            shortest = None
-            max_for_type = {"House": 2, 
-                            "Work": 5,
-                            "School": 30,
-                            "Shop": 5,
-                            "Bar": 20,
-                            "Park": 1000,
-                            "University": 1000}
+    def find(self, node_source, type_of_node, model):
+        all_nodes = model.nodes_by_type[type_of_node]
+        network = model.G
+        shortest = None
+        max_for_type = {"House": 2,
+                        "Work": 5,
+                        "School": 30,
+                        "Shop": 5,
+                        "Bar": 20,
+                        "Park": 1000,
+                        "University": 1000}
 
-            for t in all_nodes:
-                if len(self.model.grid.G.nodes[t]["agent"]) < max_for_type[type_of_node]:
-                    if nx.has_path(network, source=node_source, target=t):
-                        shortest_path =  nx.shortest_path(network, source=node_source, target=t)
-                        if shortest == None or len(shortest_path):
-                            shortest = shortest_path
-            
-            if shortest is not None:
-                return shortest[-1]
-            else:
-                return None
+        for t in all_nodes:
+            if len(self.model.grid.G.nodes[t]["agent"]) < max_for_type[type_of_node]:
+                if nx.has_path(network, source=node_source, target=t):
+                    shortest_path =  nx.shortest_path(network, source=node_source, target=t)
+                    if shortest == None or len(shortest_path):
+                        shortest = shortest_path
 
+        if shortest is not None:
+            return shortest[-1]
+        else:
+            return None
 
-        def pop_closest_dict(home):
-            network_types = model.network_types.copy()
-            network_types.remove("House")
-            closest_dict = {"House": home}
-            for n_type in network_types:
-                closest_dict[n_type] = find(home, n_type, model)
-            
-            return closest_dict
+    def pop_closest_dict(self,home):
+        network_types = self.model.network_types.copy()
+        network_types.remove("House")
+        closest_dict = {"House": home}
+        for n_type in network_types:
+            closest_dict[n_type] = self.find(home, n_type, self.model)
 
-        self.closest = pop_closest_dict(home)
+        return closest_dict
+
+    self.closest = pop_closest_dict(home)
 
     def move(self, time):
         try:
@@ -116,8 +117,8 @@ class Infect_Agent(Agent):
                         # if self.infected_timer == 0 and not agent.recovered:
                         agent.infected = True
 
-    def determin_fear(self):
-        p = self.model.percent_infected
+    def determin_fear(self,infected_sample_size):
+        p = infected_sample_size
         if p > 25:
             return 2
         elif p > 50:
