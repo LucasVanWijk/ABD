@@ -38,7 +38,6 @@ class Infect_Agent(Agent):
         # ASK from Agent: constructs corresponding action to perception at given timestep
         #(env asks an agent what action should be taken)
         self.fear = self.determin_fear(self.infected_sample_size)
-        self.fear = self.determin_fear(self.infected_sample_size)
         if self.base_chance != None:
             if self.altruist:
                 self.chance_to_move = self.base_chance / self.fear
@@ -82,7 +81,7 @@ class Infect_Agent(Agent):
             if len(self.model.grid.G.nodes[t]["agent"]) < max_for_type[type_of_node]:
                 if nx.has_path(network, source=node_source, target=t):
                     shortest_path = nx.shortest_path(network, source=node_source, target=t)
-                    if shortest == None or len(shortest_path):
+                    if shortest == None or len(shortest_path)<len(shortest):
                         shortest = shortest_path
 
         if shortest is not None:
@@ -128,7 +127,6 @@ class Infect_Agent(Agent):
             self.suspectable_duration -= 1
 
         current = self.model.grid.G.nodes[self.pos]["agent"]
-        print(current)
         if len(current) > 1:
             for agent in current:
                 if isinstance(agent, Infect_Agent):
