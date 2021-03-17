@@ -25,19 +25,29 @@ class Infect_Agent(Agent):
         # TELL to an Agent: statement that asserts perception of info at given timestep
         #(env tells an agent relevant info)
         infected_sample_size = self.model.percent_infected
-        self.infected_size = infected_sample_size
+        self.infected_sample_size= infected_sample_size
         self.time = self.model.date
-        self.base_chance, self.desired_loc_name = self.demo.getAction(self.demo, self.time)
+        returns = self.demo.getAction(self.demo, self.time)
+        if returns != None:
+            self.base_chance, self.desired_loc_name = returns
+        else:
+            self.base_chance, self.desired_loc_name = (None,None)
         pass
 
     def make_action_query(self):
         # ASK from Agent: constructs corresponding action to perception at given timestep
         #(env asks an agent what action should be taken)
         self.fear = self.determin_fear(self.infected_sample_size)
-        if self.altruist:
-            self.chance_to_move = self.base_chance/ self.fear
+        self.fear = self.determin_fear(self.infected_sample_size)
+        if self.base_chance != None:
+            if self.altruist:
+                self.chance_to_move = self.base_chance / self.fear
+            else:
+                self.chance_to_move = self.base_chance
         else:
-            self.chance_to_move = self.base_chance
+            self.chance_to_move = None
+
+
         pass
 
     def make_action_sentence(self):
