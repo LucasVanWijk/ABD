@@ -30,6 +30,7 @@ class Infect_Agent(Agent):
         time = 0
         base_chance, loc_name = self.demo.getAction(self.demo, time)
         chance_to_move = base_chance / self.fear
+
         pass
 
     def make_action_query(self):
@@ -57,7 +58,7 @@ class Infect_Agent(Agent):
         for t in all_nodes:
             if len(self.model.grid.G.nodes[t]["agent"]) < max_for_type[type_of_node]:
                 if nx.has_path(network, source=node_source, target=t):
-                    shortest_path =  nx.shortest_path(network, source=node_source, target=t)
+                    shortest_path = nx.shortest_path(network, source=node_source, target=t)
                     if shortest == None or len(shortest_path):
                         shortest = shortest_path
 
@@ -125,12 +126,12 @@ class Infect_Agent(Agent):
 
     def determin_fear(self,infected_sample_size):
         p = infected_sample_size
-        if p > 25:
-            return 2
+        if p > 75:
+            return 4
         elif p > 50:
             return 3
-        elif p > 75:
-            return 4
+        elif p > 25:
+            return 2
         else:
             return 1
 
