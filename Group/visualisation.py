@@ -3,9 +3,19 @@ from mesa.visualization.ModularVisualization import ModularServer
 from mesa.visualization.modules import ChartModule, TextElement
 from Infect_Model import BaseModel
 from mesa.visualization.UserParam import UserSettableParameter
-import matplotlib
+
+
+def node_size_based_on_crowd(node):
+    init_size = 5
+    amount_agenst = len(node[1]["agent"])
+    if amount_agenst <= 3:
+        return init_size + amount_agenst*2
+    elif amount_agenst > 3:
+        return init_size + 6 + amount_agenst/2
+
 
 def run_visual():
+
     def network_portrayal(G):
 
         portrayal = dict()
@@ -14,7 +24,7 @@ def run_visual():
         for n in G.nodes.data():
             portrayal["nodes"].append(
                 {
-                    "size": 6,
+                    "size": node_size_based_on_crowd(n),
                     "color": n[1]["color"],
                 }
             )
@@ -25,7 +35,7 @@ def run_visual():
                 {
                     "source": source,
                     "target": target,
-                    "color": "red",
+                    "color": "black",
                     "width": 1,
                 }
             )
