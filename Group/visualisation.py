@@ -58,19 +58,19 @@ def run_visual():
                         data_collector_name='datacollector')
     model_params = {
         "p_nodes": UserSettableParameter("number", "prob nodes", value=0.04),
-        "healthy_N": UserSettableParameter("slider", "amount healthy", 100, 1, 500),
-        "sick_N": UserSettableParameter("slider", "amount sick", 10, 1, 500),
+        "healthy_N": UserSettableParameter("slider", "amount healthy", 95, 1, 500),
+        "sick_N": UserSettableParameter("slider", "amount sick", 5, 1, 500),
         "altruism": UserSettableParameter("slider", "amount sick", 10, 1, 100)
     }
 
     model_params["network_params"] = [
             (model_params["healthy_N"].value + model_params["sick_N"].value, "House", "Grey"),
-            (25, "Work", "yellow"),
-            (10, "School", "green"),
-            (5, "Shop", "Brown"),
-            (5, "Bar", "Brown"),
-            (5, "Park", "Brown"),
-            (2, "University", "Red")
+            (15, "Work", "yellow"),
+            (5, "School", "green"),
+            (3, "Shop", "Brown"),
+            (3, "Bar", "Brown"),
+            (3, "Park", "Brown"),
+            (1, "University", "Red")
     ]
 
     server = ModularServer(BaseModel,

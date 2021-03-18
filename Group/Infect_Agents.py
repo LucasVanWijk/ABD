@@ -18,6 +18,7 @@ class Infect_Agent(Agent):
         self.demo = demo_class
         self.current_loc_type = "House"
         self.closest = pop_closest_dict(self)
+        self.infec_score = -31
 
     def make_percept_sentence(self):
         # TELL to an Agent: statement that asserts perception of info at given timestep
@@ -32,43 +33,58 @@ class Infect_Agent(Agent):
             self.base_chance, self.desired_loc_name = schedule
         else:
             self.base_chance, self.desired_loc_name = (None,None)
-        pass
+
 
     def make_action_query(self):
         # ASK from Agent: constructs corresponding action to perception at given timestep
         #(env asks an agent what action should be taken)
 
-        def determin_fear(infected_sample_size):
-            p = infected_sample_size
-            if p > 75:
-                return 4
-            elif p > 50:
-                return 3
-            elif p > 25:
-                return 2
-            else:
-                return 1
+        # def determin_fear(infected_sample_size):
+        #     p = infected_sample_size
+        #     if p > 75:
+        #         return 4
+        #     elif p > 50:
+        #         return 3
+        #     elif p > 25:
+        #         return 2
+        #     else:
+        #         return 1
 
-        self.fear = determin_fear(self.infected_sample_size)
-        #Determins a new base_chanse
+        # self.fear = determin_fear(self.infected_sample_size)
+        # #Determins a new base_chanse
+        # if self.base_chance != None:
+        #     if self.altruist:
+        #         self.chance_to_move = self.base_chance / self.fear
+        #     else:
+        #         self.chance_to_move = self.base_chance
+        # else:
+        #     self.chance_to_move = None
+        
+        # if self.chance_to_move != None:
+        #     if random.randint(0, 100) < self.chance_to_move:
+        #         pass
+        #     else:
+        #         self.desired_loc_name = "Home"
         if self.base_chance != None:
-            if self.altruist:
-                self.chance_to_move = self.base_chance / self.fear
-            else:
-                self.chance_to_move = self.base_chance
+            infect_factor = self.model.percent_infected * 0.01
+            self.going = self.base_chance * (1 - infect_factor) + (self.infec_score * infect_factor)
+            self.not_going = 2
+            if self.going < 5:
+                if self.going < 3:
+                    if self.going < 2:
+                        pass 
         else:
-            self.chance_to_move = None
+            self.going = None
+            self.not_going = None
 
-
-        pass
 
     def make_action_sentence(self):
         # TELL to an Agent: take action and asserts that chosen action was executed
         
         def move(self):
-            if self.chance_to_move != None:
+            if self.going != None:
                 try:
-                    if random.randint(0, 100) < self.chance_to_move:
+                    if self.going > self.not_going:
                         locId = self.closest[self.desired_loc_name]
                         self.model.grid.move_agent(self, locId)
                         self.current_loc_type = self.desired_loc_name
@@ -95,34 +111,31 @@ class Infect_Agent(Agent):
                     for agent in current:
                         if isinstance(agent, Infect_Agent):
                             #determins infect chance
-                            base_infect = 3
-                            p1 = []
-                            p2 = ["Work","Home","School", "Bar"]
-                            p3 = ["University"]
-                            p4 = ["Shop"]
-                            p5 = ["Park"]
+                            # Source https://www.sciencedirect.com/science/article/pii/S1684118220301432
+                            # Acording to this paper the attack rate is 0.84% 
+                            base_infect_per_10k = 84
+                            p1 = ["Work","Home","School", "Bar"]
+                            p2 = ["University"]
+                            p3 = ["Shop"]
+                            p4 = ["Park"]
                             location = self.current_loc_type
-                
-                            if location in p1:
-                                infect_chance = base_infect
 
-                            elif location in p2:
-                                infect_chance = base_infect/2
+                            if location in p1:
+                                infect_chance = base_infect_per_10k
                             
+                            elif location in p2:
+                                infect_chance = base_infect_per_10k/2
+
                             elif location in p3:
-                                infect_chance = base_infect/4
+                                infect_chance = base_infect_per_10k/4
 
                             elif location in p4:
-                                infect_chance = base_infect/8
-
-                            elif location in p5:
-                                infect_chance = base_infect/16
+                                infect_chance = base_infect_per_10k/8
                             
                             else:
-                                infect_chance = base_infect
-                            ran = random.randint(0,100)
-                            if  ran < infect_chance:
-                                # if self.infected_timer == 0 and not agent.recovered:
+                                infect_chance = base_infect_per_10k
+                            
+                            if  random.randint(0,10000) < infect_chance:
                                 agent.infected = True
         
         move(self)

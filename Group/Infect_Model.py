@@ -95,5 +95,7 @@ class BaseModel(Model):
     def step(self):
         #time = self.ini_date + datetime.timedelta(minutes= self.min_per_step * self.schedule.time)
         self.date = self.ini_date + datetime.timedelta(minutes= self.min_per_step * self.schedule.steps)
+        self.percent_infected = (compute_infected(self) / self.total_agents) * 100
         self.datacollector.collect(self)
         self.schedule.step()
+

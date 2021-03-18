@@ -5,7 +5,7 @@ import pandas as pd
 
 
 container = pd.DataFrame()
-vars_alt = [1,25,50,75,100]
+vars_alt = [25]
 for altrui in vars_alt:
     fixed_params = {
     "altruism": altrui,
