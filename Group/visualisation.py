@@ -15,9 +15,7 @@ def node_size_based_on_crowd(node):
 
 
 def run_visual():
-
     def network_portrayal(G):
-
         portrayal = dict()
         portrayal["nodes"] = []
 

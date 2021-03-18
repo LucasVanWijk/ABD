@@ -39,9 +39,3 @@ for altrui in vars_alt:
 print(container)    
 container.plot()
 plt.show()
-# f = pd.DataFrame()
-# f["1t25"] = container[1] - container[25]
-# f["25t50"] = container[25] - container[50]
-# f["75t100"] = container[75] - container[100]
-# f.plot()
-# plt.show()
