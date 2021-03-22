@@ -20,7 +20,7 @@ def compute_recovered(model):
 
 class BaseModel(Model):
     """A model with some number of agents."""
-    def __init__(self, healthy_N, sick_N, network_params, p_nodes, altruism, infect_chanse=20, seed=41, min_per_step=60,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
+    def __init__(self, healthy_N, sick_N, network_params, p_nodes, altruism, infect_score_upper, infect_score_lower, infect_chanse=20, seed=41, min_per_step=60,  ini_date=datetime.datetime(2020, 1, 1, 00, 00)):
         self.parallel_amount = 16
         self.healthy_agents = healthy_N
         self.sick_agent = sick_N
@@ -42,6 +42,7 @@ class BaseModel(Model):
         self.nodes_by_type = dict()
         self.total_agents = healthy_N + sick_N
         self.percent_infected = (sick_N / self.total_agents) * 100
+
         random.seed(seed)
 
         node_index = 0
@@ -66,7 +67,7 @@ class BaseModel(Model):
             if n[1]["type"] == "House":
                 chance = random.uniform(0,1)
                 agent_type = change_to_age_dict[sum([1 if x < chance else 0 for x in age_dict.values()])]
-                agent = Infect_Agent(n[0], self, n[0], False, False, agent_type)
+                agent = Infect_Agent(n[0], self, n[0], False, False, infect_score_upper, infect_score_lower, agent_type)
                 if altruist_left > 0:
                     #print("Altruism {}".format(altruist_left))
                     agent.altruist = True

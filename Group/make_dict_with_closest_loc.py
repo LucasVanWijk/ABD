@@ -5,9 +5,9 @@ def find(agent, node_source, type_of_node, model):
     network = model.G
     shortest = None
     max_for_type = {"House": 2,
-                    "Work": 5,
+                    "Work": 10,
                     "School": 30,
-                    "Shop": 5,
+                    "Shop": 10,
                     "Bar": 20,
                     "Park": 1000,
                     "University": 1000}

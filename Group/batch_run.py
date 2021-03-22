@@ -5,10 +5,12 @@ import pandas as pd
 
 
 container = pd.DataFrame()
-vars_alt = [25]
+vars_alt = [(-40,-20), (100,200)]
 for altrui in vars_alt:
     fixed_params = {
-    "altruism": altrui,
+    "altruism": 20,
+    "infect_score_lower": altrui[0],
+    "infect_score_upper": altrui[1],
     "sick_N": 10,
     "p_nodes": 0.1,
     "healthy_N": 357,

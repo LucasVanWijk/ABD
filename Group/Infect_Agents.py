@@ -6,7 +6,7 @@ from make_dict_with_closest_loc import pop_closest_dict
 
 class Infect_Agent(Agent):
     """ An agent with fixed initial wealth."""
-    def __init__(self, unique_id, model, home, infected, altruist, demo_class):
+    def __init__(self, unique_id, model, home, infected, altruist,infect_score_upper, infect_score_lower, demo_class):
         super().__init__(unique_id, model)
         self.infected_timer = random.randint(2*24,7*24+1)
         self.suspectable_duration = random.randint(10*24,15*24+1) - self.infected_timer
@@ -18,7 +18,7 @@ class Infect_Agent(Agent):
         self.demo = demo_class
         self.current_loc_type = "House"
         self.closest = pop_closest_dict(self)
-        self.infec_score = -31
+        self.infec_score = random.randint(infect_score_lower, infect_score_upper)
 
     def make_percept_sentence(self):
         # TELL to an Agent: statement that asserts perception of info at given timestep
@@ -38,41 +38,11 @@ class Infect_Agent(Agent):
     def make_action_query(self):
         # ASK from Agent: constructs corresponding action to perception at given timestep
         #(env asks an agent what action should be taken)
-
-        # def determin_fear(infected_sample_size):
-        #     p = infected_sample_size
-        #     if p > 75:
-        #         return 4
-        #     elif p > 50:
-        #         return 3
-        #     elif p > 25:
-        #         return 2
-        #     else:
-        #         return 1
-
-        # self.fear = determin_fear(self.infected_sample_size)
-        # #Determins a new base_chanse
-        # if self.base_chance != None:
-        #     if self.altruist:
-        #         self.chance_to_move = self.base_chance / self.fear
-        #     else:
-        #         self.chance_to_move = self.base_chance
-        # else:
-        #     self.chance_to_move = None
-        
-        # if self.chance_to_move != None:
-        #     if random.randint(0, 100) < self.chance_to_move:
-        #         pass
-        #     else:
-        #         self.desired_loc_name = "Home"
         if self.base_chance != None:
             infect_factor = self.model.percent_infected * 0.01
             self.going = self.base_chance * (1 - infect_factor) + (self.infec_score * infect_factor)
             self.not_going = 2
-            if self.going < 5:
-                if self.going < 3:
-                    if self.going < 2:
-                        pass 
+
         else:
             self.going = None
             self.not_going = None
